@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "814040372683",
+    "project_id": "reportingmaintenance",
+    "storage_bucket": "reportingmaintenance.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:814040372683:android:b51292fad4509f24e9d24e",
+        "android_client_info": {
+          "package_name": "com.app.reportingmaintenance"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "814040372683-n7dt6iu306uikv22vakokec55nvqtb74.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.app.reportingmaintenance",
+            "certificate_hash": "636ec7f8e9ebc097d9417189972ef8f1feb676f4"
+          }
+        },
+        {
+          "client_id": "814040372683-bladu9q5nj7qnf2sp2dmc6lsd4cvmjet.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA383Od8MD_pQbuhwjaUsny9F4NqsKikmI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "814040372683-bladu9q5nj7qnf2sp2dmc6lsd4cvmjet.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
