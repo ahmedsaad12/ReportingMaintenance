@@ -37,7 +37,7 @@
 
         </activity>
         <activity
-            android:name=".uis.students.SrudentActivity"
+            android:name=".uis.students.StudentActivity"
             android:exported="false">
 
         </activity>
