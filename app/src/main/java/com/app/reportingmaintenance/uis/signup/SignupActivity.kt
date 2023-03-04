@@ -16,10 +16,8 @@ class SignupActivity : AppCompatActivity() {
 private var loginmodel: SignupModel = SignupModel();
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
 // Remember that you should never show the action bar if the
 // status bar is hidden, so hide that too if necessary.
-        actionBar?.hide()
         binding = DataBindingUtil.setContentView(this, R.layout.activity_signup)
         intitView()
 

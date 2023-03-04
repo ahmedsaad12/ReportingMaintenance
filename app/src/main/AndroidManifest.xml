@@ -27,25 +27,50 @@
         tools:ignore="AllowBackup"
         tools:targetApi="s">
         <activity
+            android:name=".uis.technicians.TechnicActivity"
+            android:exported="false">
+
+        </activity>
+        <activity
+            android:name=".uis.faculties.FacultiesActivity"
+            android:exported="false">
+
+        </activity>
+        <activity
+            android:name=".uis.students.SrudentActivity"
+            android:exported="false">
+
+        </activity>
+        <activity
+            android:name=".uis.disruption_typs.DisruptionTypesActivity"
+            android:exported="false">
+
+        </activity>
+        <activity
+            android:name=".uis.home.HomeActivity"
+            android:exported="false"></activity>
+        <activity
+            android:name=".uis.reports.ReportsActivity"
+            android:exported="false">
+
+        </activity>
+        <activity
+            android:name=".uis.charts.ChartsActivity"
+            android:exported="false"></activity>
+        <activity
             android:name=".uis.login.LoginActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustResize"
-          >
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".uis.signup.SignupActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustResize"
-            >
-
-        </activity>
-
-
+            android:windowSoftInputMode="adjustResize" />
     </application>
 
 </manifest>
