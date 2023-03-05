@@ -15,7 +15,16 @@ class StudentActivity : AppCompatActivity() {
 // status bar is hidden, so hide that too if necessary.
         binding = DataBindingUtil.setContentView(this, R.layout.activity_students)
 
+        intitView()
+    }
 
+    private fun intitView() {
+        binding!!.fab.setOnClickListener(View.OnClickListener {
+
+            var intent = Intent(this, SignupActivity::class.java)
+            startActivity(intent)
+
+        })
     }
 
 }
