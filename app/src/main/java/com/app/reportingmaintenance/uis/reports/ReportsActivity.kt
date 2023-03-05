@@ -1,6 +1,8 @@
 package com.app.reportingmaintenance.uis.reports
 
+import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import androidx.appcompat.app.AppCompatActivity
@@ -11,7 +13,9 @@ import androidx.viewpager.widget.ViewPager
 import com.app.reportingmaintenance.R
 import com.app.reportingmaintenance.adapter.MyPagerAdapter
 import com.app.reportingmaintenance.databinding.ActivityReportsBinding
+import com.app.reportingmaintenance.uis.addreport.AddReportsActivity
 import com.app.reportingmaintenance.uis.reports.fragments.FragmentCurrentReport
+import com.app.reportingmaintenance.uis.signup.SignupActivity
 import java.util.concurrent.ThreadLocalRandom.current
 
 class ReportsActivity : AppCompatActivity() {
@@ -53,6 +57,12 @@ class ReportsActivity : AppCompatActivity() {
                 binding!!.fab.visibility=VISIBLE
 
             }
+        })
+        binding!!.fab.setOnClickListener(View.OnClickListener {
+
+            var intent = Intent(this, AddReportsActivity::class.java)
+            startActivity(intent)
+
         })
     }
 }

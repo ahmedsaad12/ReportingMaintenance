@@ -48,7 +48,29 @@
         </activity>
         <activity
             android:name=".uis.home.HomeActivity"
-            android:exported="false"></activity>
+            android:exported="false">
+
+        </activity>
+        <activity
+            android:name=".uis.addreport.AddReportsActivity"
+            android:exported="false">
+
+        </activity>
+        <activity
+            android:name=".uis.addtechnician.AddTechnicianActivity"
+            android:exported="false">
+
+        </activity>
+        <activity
+            android:name=".uis.adddisribution.AddDisributionActivity"
+            android:exported="false">
+
+        </activity>
+        <activity
+            android:name=".uis.addfaculty.AddFacultyActivity"
+            android:exported="false">
+
+        </activity>
         <activity
             android:name=".uis.reports.ReportsActivity"
             android:exported="false">

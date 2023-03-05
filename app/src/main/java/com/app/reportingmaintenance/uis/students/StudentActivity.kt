@@ -1,10 +1,13 @@
 package com.app.reportingmaintenance.uis.students
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.databinding.DataBindingUtil
 import com.app.reportingmaintenance.R
 import com.app.reportingmaintenance.databinding.ActivityStudentsBinding
+import com.app.reportingmaintenance.uis.signup.SignupActivity
 
 class StudentActivity : AppCompatActivity() {
     private var binding: ActivityStudentsBinding? = null
