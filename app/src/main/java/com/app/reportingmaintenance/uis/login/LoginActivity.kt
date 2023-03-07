@@ -2,6 +2,7 @@ package com.app.reportingmaintenance.uis.login
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -44,7 +45,7 @@ class LoginActivity : AppCompatActivity() {
             dRef!!.child(Tags.TABLE_USERS)
                 .child(loginmodel.email.replaceAfter("@", "").replace("@", "")).get()
                 .addOnSuccessListener {
-                    Log.e("rrr",it.getValue<>());
+                    Log.e("rrr", it.getValue().toString());
                     val userModel: UserModel = it.getValue(UserModel::class.java)!!
                     if (userModel.email == loginmodel.email && userModel.password == loginmodel.password) {
                         val intent = Intent(this, HomeActivity::class.java)
