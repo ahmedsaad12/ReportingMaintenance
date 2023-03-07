@@ -15,6 +15,7 @@ import com.app.reportingmaintenance.uis.home.HomeActivity
 import com.app.reportingmaintenance.uis.signup.SignupActivity
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ktx.getValue
 
 
 class LoginActivity : AppCompatActivity() {
@@ -43,6 +44,7 @@ class LoginActivity : AppCompatActivity() {
             dRef!!.child(Tags.TABLE_USERS)
                 .child(loginmodel.email.replaceAfter("@", "").replace("@", "")).get()
                 .addOnSuccessListener {
+                    Log.e("rrr",it.getValue<>());
                     val userModel: UserModel = it.getValue(UserModel::class.java)!!
                     if (userModel.email == loginmodel.email && userModel.password == loginmodel.password) {
                         val intent = Intent(this, HomeActivity::class.java)
