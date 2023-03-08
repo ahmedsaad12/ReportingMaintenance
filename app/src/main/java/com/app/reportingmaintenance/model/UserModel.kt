@@ -1,17 +1,26 @@
 package com.app.reportingmaintenance.model
 
-import java.io.Serializable
-
-class UserModel : Serializable {
-
-    var email: String? = null
-    var password: String? = null
+import com.google.firebase.database.Exclude
+import com.google.firebase.database.IgnoreExtraProperties
 
 
-    constructor() {}
-    constructor(email: String?, name: String?) {
-        this.email = email
-        this.password = password
+@IgnoreExtraProperties
+data class UserModel(
+    var studentNumber: String? = "",
+    var email: String? = "",
+    var password: String? = "",
+    var name: String? = "",
+    var phone: String? = "",
+){
 
+    @Exclude
+    fun toMap(): Map<String, Any?> {
+        return mapOf(
+            "email" to email,
+            "password" to password,
+            "studentNumber" to studentNumber,
+            "name" to name,
+            "phone" to phone,
+        )
     }
 }

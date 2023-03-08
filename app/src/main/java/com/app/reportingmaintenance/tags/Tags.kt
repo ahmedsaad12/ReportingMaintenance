@@ -8,7 +8,7 @@ object Tags {
 
     //////////////database/////////////////
     const val DATABASE_NAME = "reportmaintaince"
-    const val TABLE_USERS = "users"
+    const val TABLE_USERS = "user"
     const val TABLE_REPORTS = "Reports"
     const val TABLE_SETTINGS = "Settings"
 }

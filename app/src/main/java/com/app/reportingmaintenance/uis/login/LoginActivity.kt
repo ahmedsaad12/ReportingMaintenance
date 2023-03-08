@@ -11,9 +11,11 @@ import com.app.reportingmaintenance.R
 import com.app.reportingmaintenance.databinding.ActivityLoginBinding
 import com.app.reportingmaintenance.model.LoginModel
 import com.app.reportingmaintenance.model.UserModel
+import com.app.reportingmaintenance.preferences.Preferences
 import com.app.reportingmaintenance.tags.Tags
 import com.app.reportingmaintenance.uis.home.HomeActivity
 import com.app.reportingmaintenance.uis.signup.SignupActivity
+import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.getValue
@@ -23,16 +25,27 @@ class LoginActivity : AppCompatActivity() {
     private var binding: ActivityLoginBinding? = null
     private var loginmodel: LoginModel = LoginModel()
     private var dRef: DatabaseReference? = null
+    private var preferences: Preferences? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 // Remember that you should never show the action bar if the
 // status bar is hidden, so hide that too if necessary.
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login)
+
         intitView()
 
     }
 
     private fun intitView() {
+        preferences = Preferences.newInstance()
+        if(preferences!!.getSession(this)==Tags.session_login){
+            val intent = Intent(this, HomeActivity::class.java)
+            startActivity(intent)
+
+            finish()
+        }
+        else{
         dRef = FirebaseDatabase.getInstance().getReference(Tags.DATABASE_NAME)
         binding!!.model = loginmodel
         binding!!.txtCreateAcount.setOnClickListener(View.OnClickListener {
@@ -42,23 +55,33 @@ class LoginActivity : AppCompatActivity() {
 
         })
         binding!!.btnLogin.setOnClickListener(View.OnClickListener {
+           // Log.e("rrr", loginmodel.email.replaceAfter("@", "").replace("@", ""));
+
             dRef!!.child(Tags.TABLE_USERS)
                 .child(loginmodel.email.replaceAfter("@", "").replace("@", "")).get()
                 .addOnSuccessListener {
-                    Log.e("rrr", it.getValue().toString());
-                    val userModel: UserModel = it.getValue(UserModel::class.java)!!
-                    if (userModel.email == loginmodel.email && userModel.password == loginmodel.password) {
-                        val intent = Intent(this, HomeActivity::class.java)
-                        startActivity(intent)
+                    if (it.value != null) {
+                        Log.e("rrr", it.value.toString());
+                        val dataSnapshot = (it as DataSnapshot)
+                        val userModel = dataSnapshot.getValue<UserModel>()
+                        if (userModel!!.email == loginmodel.email && userModel.password == loginmodel.password) {
+                            preferences!!.create_update_userData(this,userModel)
+
+                            val intent = Intent(this, HomeActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                        } else {
+                            Toast.makeText(this, "invaild user", Toast.LENGTH_LONG).show()
+                        }
                     } else {
                         Toast.makeText(this, "invaild user", Toast.LENGTH_LONG).show()
+
                     }
                 }
-
 
             //
 
         })
-    }
+    }}
 
 }
