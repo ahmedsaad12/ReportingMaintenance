@@ -70,7 +70,7 @@ class SignupActivity : AppCompatActivity() {
     }
 
     private fun setuser() {
-        val post = UserModel(loginmodel.studentNumber, loginmodel.email, loginmodel.password, loginmodel.name,loginmodel.phone)
+        val post = UserModel(loginmodel.studentNumber, loginmodel.email, loginmodel.password, loginmodel.name,loginmodel.phone,"user")
         val postValues = post.toMap()
         dRef!!.child(Tags.TABLE_USERS)
             .child(loginmodel.email.replaceAfter("@", "").replace("@", ""))

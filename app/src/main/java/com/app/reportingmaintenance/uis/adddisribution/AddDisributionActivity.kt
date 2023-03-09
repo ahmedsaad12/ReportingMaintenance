@@ -12,11 +12,16 @@ import com.app.reportingmaintenance.databinding.ActivitySignupBinding
 import com.app.reportingmaintenance.model.AddDataModel
 import com.app.reportingmaintenance.model.LoginModel
 import com.app.reportingmaintenance.model.SignupModel
+import com.app.reportingmaintenance.tags.Tags
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 
 
 class AddDisributionActivity : AppCompatActivity() {
     private var binding: ActivityAdddisributionBinding? = null
 private var addDataModel: AddDataModel = AddDataModel();
+    private var dRef: DatabaseReference? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 // Remember that you should never show the action bar if the
@@ -27,7 +32,15 @@ private var addDataModel: AddDataModel = AddDataModel();
     }
 
     private fun intitView() {
-        binding!!.model=addDataModel;
+        dRef = FirebaseDatabase.getInstance().getReference(Tags.DATABASE_NAME)
+
+        binding!!.model=addDataModel
+        binding!!.btnLogin.setOnClickListener(View.OnClickListener {
+            dRef!!.child(Tags.TABLE_DisruptionTypes).child(addDataModel.name).child("name").setValue(addDataModel.name).addOnFailureListener({}).addOnSuccessListener {
+                finish()
+            }
+        })
+
     }
 
 }

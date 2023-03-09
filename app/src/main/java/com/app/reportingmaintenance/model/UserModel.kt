@@ -11,6 +11,7 @@ data class UserModel(
     var password: String? = "",
     var name: String? = "",
     var phone: String? = "",
+    var user_type: String? = "",
 ){
 
     @Exclude
@@ -21,6 +22,7 @@ data class UserModel(
             "studentNumber" to studentNumber,
             "name" to name,
             "phone" to phone,
+            "user_type" to user_type,
         )
     }
 }
