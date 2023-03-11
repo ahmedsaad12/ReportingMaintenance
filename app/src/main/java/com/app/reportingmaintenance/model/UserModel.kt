@@ -16,13 +16,24 @@ data class UserModel(
 
     @Exclude
     fun toMap(): Map<String, Any?> {
-        return mapOf(
+        if( studentNumber!!.isNotEmpty()){
+
+        return  mapOf(
             "email" to email,
             "password" to password,
             "studentNumber" to studentNumber,
             "name" to name,
             "phone" to phone,
             "user_type" to user_type,
+        )}
+        else{
+        return mapOf(
+            "email" to email,
+            "password" to password,
+
+            "name" to name,
+
+            "user_type" to user_type,
         )
-    }
+    }}
 }

@@ -75,10 +75,13 @@ class SignupActivity : AppCompatActivity() {
         dRef!!.child(Tags.TABLE_USERS)
             .child(loginmodel.email.replaceAfter("@", "").replace("@", ""))
             .setValue(postValues).addOnSuccessListener {
-                preferences!!.create_update_userData(this,post)
+                if(preferences!!.getSession(this)!=Tags.session_login){
+                    preferences!!.create_update_userData(this,post)
 
-                val intent = Intent(this, HomeActivity::class.java)
-                startActivity(intent)
+                    val intent = Intent(this, HomeActivity::class.java)
+                    startActivity(intent)
+                }
+
                 finish()
             }.addOnFailureListener {
                 Toast.makeText(this, "invaild user", Toast.LENGTH_LONG).show()

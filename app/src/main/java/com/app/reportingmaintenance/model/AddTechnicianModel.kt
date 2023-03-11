@@ -1,5 +1,6 @@
 package com.app.reportingmaintenance.model
 
+import android.content.Context
 import android.util.Patterns
 import android.widget.Toast
 import androidx.databinding.BaseObservable
@@ -10,11 +11,29 @@ import com.app.reportingmaintenance.BR
 class AddTechnicianModel : BaseObservable() {
 
     var error_name = ObservableField<String>()
-
+    var error_email = ObservableField<String>()
+    var error_password = ObservableField<String>()
+    lateinit var  context:Context
     @get:Bindable
     var isvaild = false
-    var id = 0
+    var id = ""
+    @get:Bindable
+    var email = ""
+        set(value) {
+            field = value
+            validate()
 
+            notifyPropertyChanged(BR.email)
+
+        }
+
+    @get:Bindable
+    var password = ""
+        set(value) {
+            field = value
+            validate()
+            notifyPropertyChanged(BR.password)
+        }
     @get:Bindable
     var name = ""
         set(value) {
@@ -27,28 +46,42 @@ class AddTechnicianModel : BaseObservable() {
 
 
     private fun validate() {
-        if (name.isNotEmpty()
-            &&id!=0
+        if (Patterns.EMAIL_ADDRESS.matcher(email).matches() && password.isNotEmpty()&&password.length>=6&&name.isNotEmpty()
+            &&id.isNotEmpty()
         ) {
 
             error_name.set(null)
+            error_email.set(null)
+            error_password.set(null)
             isvaild = true
             notifyPropertyChanged(BR.isvaild)
         } else {
             isvaild = false
-
+            if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+                error_email.set("Invaild Email")
+            }
+            else{
+                error_email.set(null)
+            }
+            if (password.isEmpty()||password.length<6){
+                error_password.set("Incorrect Password")
+            }
+            else{
+                error_password.set(null)
+            }
             if (name.isEmpty()) {
                 error_name.set("Field Required")
             } else {
                 error_name.set(null)
             }
 
-if(id==0){
-    //Toast.makeText(get,"Choose type",Toast.LENGTH_LONG).show()
+if(id.isEmpty()){
+    Toast.makeText(context,"Choose type",Toast.LENGTH_LONG).show()
 }
             notifyPropertyChanged(BR.isvaild)
         }
-
+        error_password.notifyChange()
+        error_email.notifyChange()
         error_name.notifyChange()
 
     }
