@@ -8,9 +8,10 @@ object Tags {
 
     //////////////database/////////////////
     const val DATABASE_NAME = "reportmaintaince"
+    const val Bucket_NAME = "gs://reportingmaintenance.appspot.com"
     const val TABLE_USERS = "user"
     const val TABLE_Faculties = "Faculties"
+    const val TABLE_Places = "Places"
     const val TABLE_DisruptionTypes = "DisruptionTypes"
     const val TABLE_REPORTS = "Reports"
-    const val TABLE_SETTINGS = "Settings"
 }

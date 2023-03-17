@@ -1,4 +1,4 @@
-package com.app.reportingmaintenance.uis.technicians
+package com.app.reportingmaintenance.uis.places
 
 import android.content.ContentValues
 import android.content.Intent
@@ -7,44 +7,49 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import com.app.reportingmaintenance.R
-import com.app.reportingmaintenance.adapter.StudentAdapter
-import com.app.reportingmaintenance.adapter.TechnicanAdapter
-import com.app.reportingmaintenance.databinding.ActivityReportsBinding
-import com.app.reportingmaintenance.databinding.ActivityTechniciansBinding
-import com.app.reportingmaintenance.model.UserModel
+import com.app.reportingmaintenance.adapter.DataAdapter
+import com.app.reportingmaintenance.databinding.ActivityPlacesBinding
+import com.app.reportingmaintenance.model.DataModel
 import com.app.reportingmaintenance.tags.Tags
-import com.app.reportingmaintenance.uis.addfaculty.AddFacultyActivity
-import com.app.reportingmaintenance.uis.addtechnician.AddTechnicianActivity
+import com.app.reportingmaintenance.uis.addplcae.AddPlaceActivity
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.getValue
 
-class TechnicActivity : AppCompatActivity() {
-    private var binding: ActivityTechniciansBinding? = null
+class PlacesActivity : AppCompatActivity() {
+    private var binding: ActivityPlacesBinding? = null
     private var dRef: DatabaseReference? = null
-    private var studentAdapter: TechnicanAdapter? = null
-    private var userList:MutableList<UserModel>?= null
+    private var placeAdapter: DataAdapter? = null
+    private var placeList:MutableList<DataModel>?= null
+    private var faculty_name=""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 // Remember that you should never show the action bar if the
 // status bar is hidden, so hide that too if necessary.
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_technicians)
-
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_places)
+        getDataFromIntent()
         intitView()
     }
 
-    private fun intitView() {
-        userList = mutableListOf()
+    private fun getDataFromIntent() {
+        var intent: Intent
+        intent= getIntent()
+        faculty_name= intent.getStringExtra("faculty_name")!!
+    }
 
-        studentAdapter= TechnicanAdapter(userList!!)
+    private fun intitView() {
+        placeList = mutableListOf()
+
+        placeAdapter=DataAdapter(placeList!!,this)
 
         dRef = FirebaseDatabase.getInstance().getReference(Tags.DATABASE_NAME)
-        binding!!.recview.layoutManager = LinearLayoutManager(this)
-        binding!!.recview.adapter=studentAdapter
+        binding!!.recview.layoutManager = GridLayoutManager(this,3)
+        binding!!.recview.adapter=placeAdapter
         binding!!.fab.setOnClickListener(View.OnClickListener {
 
-            var intent = Intent(this, AddTechnicianActivity::class.java)
+            var intent = Intent(this, AddPlaceActivity::class.java)
+            intent.putExtra("faculty_name",faculty_name)
             startActivity(intent)
 
         })
@@ -52,21 +57,22 @@ class TechnicActivity : AppCompatActivity() {
     }
 
     private fun getData() {
-        val myMostViewedPostsQuery = dRef!!.child(Tags.TABLE_USERS)
-            .orderByChild("user_type").equalTo("tech")
-        userList!!.clear()
+        val myMostViewedPostsQuery = dRef!!.child(Tags.TABLE_Places)
+            .orderByChild("faculty_name").equalTo(faculty_name);
+        placeList!!.clear()
         myMostViewedPostsQuery.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                userList!!.clear()
+                placeList!!.clear()
+
                 for (postSnapshot in dataSnapshot.children) {
                     // TODO: handle the post
                     Log.e(ContentValues.TAG, postSnapshot.value.toString())
-                    val userModel = postSnapshot.getValue<UserModel>()
+                    val dataModel = postSnapshot.getValue<DataModel>()
 
-                    userList!!.add(userModel!!);
+                    placeList!!.add(dataModel!!);
 
                 }
-                studentAdapter!!.notifyDataSetChanged();
+                placeAdapter!!.notifyDataSetChanged();
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
@@ -76,4 +82,5 @@ class TechnicActivity : AppCompatActivity() {
             }
         })
     }
+
 }

@@ -8,6 +8,7 @@ import androidx.databinding.DataBindingUtil
 import com.app.reportingmaintenance.R
 import com.app.reportingmaintenance.databinding.ActivityHomeBinding
 import com.app.reportingmaintenance.model.LoginModel
+import com.app.reportingmaintenance.preferences.Preferences
 import com.app.reportingmaintenance.uis.charts.ChartsActivity
 import com.app.reportingmaintenance.uis.disruption_typs.DisruptionTypesActivity
 import com.app.reportingmaintenance.uis.faculties.FacultiesActivity
@@ -17,6 +18,7 @@ import com.app.reportingmaintenance.uis.technicians.TechnicActivity
 
 class HomeActivity : AppCompatActivity() {
     private var binding: ActivityHomeBinding? = null
+    private var preferences: Preferences? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 // Remember that you should never show the action bar if the
@@ -25,29 +27,41 @@ class HomeActivity : AppCompatActivity() {
 
         intitView()
     }
+
     private fun intitView() {
+        preferences = Preferences.newInstance()
+
+        if (!preferences!!.getUserData(this).user_type.equals("admin")) {
+            binding!!.cardCharts.visibility = View.GONE
+            binding!!.cardTech.visibility = View.GONE
+            binding!!.cardDis.visibility = View.GONE
+            binding!!.cardFac.visibility = View.GONE
+            binding!!.cardStu.visibility = View.GONE
+
+
+        }
         binding!!.cardCharts.setOnClickListener(View.OnClickListener {
-            var intent= Intent(this, ChartsActivity::class.java)
+            var intent = Intent(this, ChartsActivity::class.java)
             startActivity(intent)
         })
         binding!!.cardReports.setOnClickListener(View.OnClickListener {
-            var intent= Intent(this, ReportsActivity::class.java)
+            var intent = Intent(this, ReportsActivity::class.java)
             startActivity(intent)
         })
         binding!!.cardTech.setOnClickListener(View.OnClickListener {
-            var intent= Intent(this, TechnicActivity::class.java)
+            var intent = Intent(this, TechnicActivity::class.java)
             startActivity(intent)
         })
         binding!!.cardDis.setOnClickListener(View.OnClickListener {
-            var intent= Intent(this, DisruptionTypesActivity::class.java)
+            var intent = Intent(this, DisruptionTypesActivity::class.java)
             startActivity(intent)
         })
         binding!!.cardFac.setOnClickListener(View.OnClickListener {
-            var intent= Intent(this, FacultiesActivity::class.java)
+            var intent = Intent(this, FacultiesActivity::class.java)
             startActivity(intent)
         })
         binding!!.cardStu.setOnClickListener(View.OnClickListener {
-            var intent= Intent(this, StudentActivity::class.java)
+            var intent = Intent(this, StudentActivity::class.java)
             startActivity(intent)
         })
     }

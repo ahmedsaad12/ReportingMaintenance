@@ -5,7 +5,7 @@ import com.google.firebase.database.IgnoreExtraProperties
 
 
 @IgnoreExtraProperties
-data class FacultyDisributionModel(
+data class DataModel(
 
     var name: String? = "",
 

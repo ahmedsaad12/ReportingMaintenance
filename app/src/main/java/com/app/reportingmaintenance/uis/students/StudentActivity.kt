@@ -51,10 +51,11 @@ binding!!.recview.layoutManager = LinearLayoutManager(this)
 
     private fun getData() {
         val myMostViewedPostsQuery = dRef!!.child(Tags.TABLE_USERS)
-            .orderByChild("user_type").equalTo("user");
+            .orderByChild("user_type").equalTo("user")
+        userList!!.clear()
         myMostViewedPostsQuery.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-
+                userList!!.clear()
                 for (postSnapshot in dataSnapshot.children) {
                     // TODO: handle the post
                     Log.e(TAG, postSnapshot.value.toString())

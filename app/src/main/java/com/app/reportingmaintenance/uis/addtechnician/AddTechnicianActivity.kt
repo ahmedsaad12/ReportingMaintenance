@@ -92,10 +92,10 @@ private var addDataModel: AddTechnicianModel = AddTechnicianModel();
         dRef!!.child(Tags.TABLE_USERS)
             .child(addDataModel.email.replaceAfter("@", "").replace("@", ""))
             .setValue(postValues).addOnSuccessListener {
-                preferences!!.create_update_userData(this,post)
-
-                val intent = Intent(this, HomeActivity::class.java)
-                startActivity(intent)
+//                preferences!!.create_update_userData(this,post)
+//
+//                val intent = Intent(this, HomeActivity::class.java)
+//                startActivity(intent)
                 finish()
             }.addOnFailureListener {
                 Toast.makeText(this, "invaild user", Toast.LENGTH_LONG).show()
@@ -104,16 +104,17 @@ private var addDataModel: AddTechnicianModel = AddTechnicianModel();
     }
     private fun getData() {
         val myMostViewedPostsQuery = dRef!!.child(Tags.TABLE_DisruptionTypes)
-
+disList!!.clear()
         myMostViewedPostsQuery.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
+                disList!!.clear()
 
                 for (postSnapshot in dataSnapshot.children) {
                     // TODO: handle the post
                     Log.e(ContentValues.TAG, postSnapshot.value.toString())
-                    val facultyDisributionModel = postSnapshot.getValue<FacultyDisributionModel>()
+                    val dataModel = postSnapshot.getValue<DataModel>()
 
-                    disList!!.add(facultyDisributionModel!!.name!!);
+                    disList!!.add(dataModel!!.name!!);
 
                 }
                 disAdapter!!.notifyDataSetChanged()

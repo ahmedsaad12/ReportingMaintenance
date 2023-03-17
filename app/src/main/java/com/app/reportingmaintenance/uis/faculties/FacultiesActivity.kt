@@ -8,25 +8,21 @@ import android.util.Log
 import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.reportingmaintenance.R
-import com.app.reportingmaintenance.adapter.FacultyDisributionAdapter
-import com.app.reportingmaintenance.adapter.StudentAdapter
+import com.app.reportingmaintenance.adapter.DataAdapter
 import com.app.reportingmaintenance.databinding.ActivityFacultiesBinding
-import com.app.reportingmaintenance.databinding.ActivityTechniciansBinding
-import com.app.reportingmaintenance.model.FacultyDisributionModel
-import com.app.reportingmaintenance.model.UserModel
+import com.app.reportingmaintenance.model.DataModel
 import com.app.reportingmaintenance.tags.Tags
-import com.app.reportingmaintenance.uis.adddisribution.AddDisributionActivity
 import com.app.reportingmaintenance.uis.addfaculty.AddFacultyActivity
+import com.app.reportingmaintenance.uis.places.PlacesActivity
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.getValue
 
 class FacultiesActivity : AppCompatActivity() {
     private var binding: ActivityFacultiesBinding? = null
     private var dRef: DatabaseReference? = null
-    private var facultyAdapter: FacultyDisributionAdapter? = null
-    private var facultyList:MutableList<FacultyDisributionModel>?= null
+    private var facultyAdapter: DataAdapter? = null
+    private var facultyList:MutableList<DataModel>?= null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 // Remember that you should never show the action bar if the
@@ -38,7 +34,7 @@ class FacultiesActivity : AppCompatActivity() {
     private fun intitView() {
         facultyList = mutableListOf()
 
-        facultyAdapter=FacultyDisributionAdapter(facultyList!!)
+        facultyAdapter=DataAdapter(facultyList!!,this)
 
         dRef = FirebaseDatabase.getInstance().getReference(Tags.DATABASE_NAME)
         binding!!.recview.layoutManager = GridLayoutManager(this,3)
@@ -54,19 +50,19 @@ class FacultiesActivity : AppCompatActivity() {
 
     private fun getData() {
         val myMostViewedPostsQuery = dRef!!.child(Tags.TABLE_Faculties)
-
+facultyList!!.clear()
         myMostViewedPostsQuery.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-
+                facultyList!!.clear()
                 for (postSnapshot in dataSnapshot.children) {
                     // TODO: handle the post
                     Log.e(ContentValues.TAG, postSnapshot.value.toString())
-                    val facultyDisributionModel = postSnapshot.getValue<FacultyDisributionModel>()
+                    val dataModel = postSnapshot.getValue<DataModel>()
 
-                    facultyList!!.add(facultyDisributionModel!!);
+                    facultyList!!.add(dataModel!!);
 
                 }
-                facultyAdapter!!.notifyDataSetChanged();
+                facultyAdapter!!.notifyDataSetChanged()
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
@@ -75,6 +71,12 @@ class FacultiesActivity : AppCompatActivity() {
                 // ...
             }
         })
+    }
+
+    fun showPlaces(dataModel: DataModel) {
+        var intent = Intent(this, PlacesActivity::class.java)
+        intent.putExtra("faculty_name",dataModel.name)
+        startActivity(intent)
     }
 
 }

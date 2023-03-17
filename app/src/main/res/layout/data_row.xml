@@ -10,7 +10,7 @@
 
         <variable
             name="model"
-            type="com.app.reportingmaintenance.model.FacultyDisributionModel" />
+            type="com.app.reportingmaintenance.model.DataModel" />
     </data>
 
     <androidx.cardview.widget.CardView

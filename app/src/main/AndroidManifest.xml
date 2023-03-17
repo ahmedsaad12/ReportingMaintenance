@@ -57,6 +57,16 @@
 
         </activity>
         <activity
+            android:name=".uis.places.PlacesActivity"
+            android:exported="false">
+
+        </activity>
+        <activity
+            android:name=".uis.addplcae.AddPlaceActivity"
+            android:exported="false">
+
+        </activity>
+        <activity
             android:name=".uis.addtechnician.AddTechnicianActivity"
             android:exported="false">
 
