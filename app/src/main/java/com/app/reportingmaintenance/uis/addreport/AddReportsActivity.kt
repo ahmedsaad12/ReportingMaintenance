@@ -23,13 +23,13 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import com.app.reportingmaintenance.R
 import com.app.reportingmaintenance.databinding.ActivityAddreportBinding
+import com.app.reportingmaintenance.databinding.ToolbarBinding
 import com.app.reportingmaintenance.model.AddReportModel
 import com.app.reportingmaintenance.model.DataModel
 import com.app.reportingmaintenance.model.ReportModel
-import com.app.reportingmaintenance.preferences.Preferences
 import com.app.reportingmaintenance.share.Common
 import com.app.reportingmaintenance.tags.Tags
-import com.app.reportingmaintenance.uis.home.HomeActivity
+import com.app.reportingmaintenance.uis.places.PlacesActivity
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
@@ -75,6 +75,16 @@ class AddReportsActivity : AppCompatActivity() {
     }
 
     private fun intitView() {
+        addDataModel.context = this
+        setUpToolbar(
+            binding!!.toolbar,
+            "Add Report",
+            R.color.white,
+            R.color.black
+        )
+        binding!!.toolbar.llBack.setOnClickListener {
+            finish()
+        }
         dRef = FirebaseDatabase.getInstance().getReference(Tags.DATABASE_NAME)
 
         storageRef = Firebase.storage(Tags.Bucket_NAME).reference
@@ -95,7 +105,7 @@ class AddReportsActivity : AppCompatActivity() {
         binding!!.spplace.adapter = placeAdapter
         binding!!.spPerority.adapter = peroirityAdapter
         binding!!.model = addDataModel
-        launcher = registerForActivityResult<Intent, ActivityResult>(
+        launcher = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
         ) { result: ActivityResult ->
             if (result.resultCode == RESULT_OK && result.data != null) {
@@ -107,6 +117,7 @@ class AddReportsActivity : AppCompatActivity() {
                     addDataModel.image = uri!!.toString()
 
                     binding!!.model = addDataModel
+                    addDataModel.validate()
                 } else if (selectedReq == CAMERA_REQ) {
                     val bitmap = result.data!!.extras!!["data"] as Bitmap?
                     binding!!.icon.visibility = View.GONE
@@ -116,23 +127,30 @@ class AddReportsActivity : AppCompatActivity() {
                         Picasso.get().load(File(path)).fit().into(binding!!.image)
                         addDataModel.image = uri!!.toString()
                         binding!!.model = addDataModel
+                        addDataModel.validate()
                     }
                 }
             }
         }
-        binding!!.flGallery.setOnClickListener { view ->
+        binding!!.btnadd.setOnClickListener {
+            var intent = Intent(this, PlacesActivity::class.java)
+            intent.putExtra("faculty_name", addDataModel.idfac)
+            startActivity(intent)
+        }
+        binding!!.flGallery.setOnClickListener {
             closeSheet()
             checkReadPermission()
         }
 
-        binding!!.flCamera.setOnClickListener { view ->
+        binding!!.flCamera.setOnClickListener {
             closeSheet()
             checkCameraPermission()
         }
 
-        binding!!.btnCancel.setOnClickListener { view -> closeSheet() }
-        binding!!.flImage.setOnClickListener { view -> openSheet() }
+        binding!!.btnCancel.setOnClickListener { closeSheet() }
+        binding!!.flImage.setOnClickListener { openSheet() }
         binding!!.btnLogin.setOnClickListener {
+
             val file = File(Common.getImagePath(this, uri!!)!!)
 
             val uploadTask = storageRef!!.child("file/${file.name}").putFile(uri!!)
@@ -253,20 +271,20 @@ class AddReportsActivity : AppCompatActivity() {
     private fun getplace() {
         val myMostViewedPostsQuery = dRef!!.child(Tags.TABLE_Places).orderByChild("faculty_name")
             .equalTo(addDataModel.idfac);
-        facList!!.clear()
+        placeList!!.clear()
         myMostViewedPostsQuery.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                facList!!.clear()
+                placeList!!.clear()
 
                 for (postSnapshot in dataSnapshot.children) {
                     // TODO: handle the post
                     Log.e(ContentValues.TAG, postSnapshot.value.toString())
                     val dataModel = postSnapshot.getValue<DataModel>()
 
-                    facList!!.add(dataModel!!.name!!);
+                    placeList!!.add(dataModel!!.name!!);
 
                 }
-                facAdapter!!.notifyDataSetChanged()
+                placeAdapter!!.notifyDataSetChanged()
 
 
             }
@@ -383,7 +401,8 @@ class AddReportsActivity : AppCompatActivity() {
             addDataModel.idfac,
             addDataModel.idplace,
             addDataModel.periority,
-            uri.path
+            uri.path,
+            "new"
         )
         val postValues = post.toMap()
         dRef!!.child(Tags.TABLE_REPORTS)
@@ -397,4 +416,17 @@ class AddReportsActivity : AppCompatActivity() {
             }
     }
 
+    fun setUpToolbar(
+        binding: ToolbarBinding,
+        title: String?,
+        background: Int,
+        arrowTitleColor: Int
+    ) {
+        binding.lang = "en"
+        binding.title = title
+        binding.llBack.setColorFilter(ContextCompat.getColor(this, arrowTitleColor))
+        binding.tvTitle.setTextColor(ContextCompat.getColor(this, arrowTitleColor))
+        binding.toolbar.setBackgroundResource(background)
+        binding.llBack.setOnClickListener { v -> finish() }
+    }
 }

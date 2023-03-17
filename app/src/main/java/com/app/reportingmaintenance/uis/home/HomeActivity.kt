@@ -4,9 +4,11 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import com.app.reportingmaintenance.R
 import com.app.reportingmaintenance.databinding.ActivityHomeBinding
+import com.app.reportingmaintenance.databinding.ToolbarBinding
 import com.app.reportingmaintenance.model.LoginModel
 import com.app.reportingmaintenance.preferences.Preferences
 import com.app.reportingmaintenance.uis.charts.ChartsActivity
@@ -29,6 +31,15 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun intitView() {
+        setUpToolbar(
+            binding!!.toolbar,
+            "Home",
+            R.color.white,
+            R.color.black
+        )
+        binding!!.toolbar.llBack.setOnClickListener {
+            finish()
+        }
         preferences = Preferences.newInstance()
 
         if (!preferences!!.getUserData(this).user_type.equals("admin")) {
@@ -64,5 +75,18 @@ class HomeActivity : AppCompatActivity() {
             var intent = Intent(this, StudentActivity::class.java)
             startActivity(intent)
         })
+    }
+    fun setUpToolbar(
+        binding: ToolbarBinding,
+        title: String?,
+        background: Int,
+        arrowTitleColor: Int
+    ) {
+        binding.lang = "en"
+        binding.title = title
+        binding.llBack.setColorFilter(ContextCompat.getColor(this, arrowTitleColor))
+        binding.tvTitle.setTextColor(ContextCompat.getColor(this, arrowTitleColor))
+        binding.toolbar.setBackgroundResource(background)
+        binding.llBack.setOnClickListener { v -> finish() }
     }
 }

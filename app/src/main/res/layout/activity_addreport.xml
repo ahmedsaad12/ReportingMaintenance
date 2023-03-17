@@ -8,7 +8,14 @@
             name="model"
             type="com.app.reportingmaintenance.model.AddReportModel" />
     </data>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
 
+android:orientation="vertical">
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -233,7 +240,7 @@
                             android:layout_height="match_parent"
                             android:layout_weight=".9"
                             android:background="@color/transparent"
-                            android:gravity="center_vertical"
+                            android:gravity="start"
                             android:hint="Discription"
                             android:inputType="text"
                             android:lines="1"
@@ -292,15 +299,16 @@
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
 
-        <com.skydoves.expandablelayout.ExpandableLayout
+        <com.ogoons.expandablelayout.ExpandableLayout
             android:id="@+id/expandLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="bottom"
             android:background="@color/black_trans"
             android:padding="16dp"
-            app:expandable_duration="300"
-            app:expandable_isExpanded="false">
+            app:duration="500"
+            app:parallax="0.5"
+            app:expanded="false">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -388,6 +396,7 @@
             </LinearLayout>
 
 
-        </com.skydoves.expandablelayout.ExpandableLayout>
+        </com.ogoons.expandablelayout.ExpandableLayout>
     </FrameLayout>
+</LinearLayout>
 </layout>

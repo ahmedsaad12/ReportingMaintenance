@@ -6,11 +6,13 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import com.app.reportingmaintenance.R
 import com.app.reportingmaintenance.adapter.DataAdapter
 import com.app.reportingmaintenance.databinding.ActivityPlacesBinding
+import com.app.reportingmaintenance.databinding.ToolbarBinding
 import com.app.reportingmaintenance.model.DataModel
 import com.app.reportingmaintenance.tags.Tags
 import com.app.reportingmaintenance.uis.addplcae.AddPlaceActivity
@@ -39,6 +41,15 @@ class PlacesActivity : AppCompatActivity() {
     }
 
     private fun intitView() {
+        setUpToolbar(
+            binding!!.toolbar,
+            "Places",
+            R.color.white,
+            R.color.black
+        )
+        binding!!.toolbar.llBack.setOnClickListener {
+            finish()
+        }
         placeList = mutableListOf()
 
         placeAdapter=DataAdapter(placeList!!,this)
@@ -82,5 +93,17 @@ class PlacesActivity : AppCompatActivity() {
             }
         })
     }
-
+    fun setUpToolbar(
+        binding: ToolbarBinding,
+        title: String?,
+        background: Int,
+        arrowTitleColor: Int
+    ) {
+        binding.lang = "en"
+        binding.title = title
+        binding.llBack.setColorFilter(ContextCompat.getColor(this, arrowTitleColor))
+        binding.tvTitle.setTextColor(ContextCompat.getColor(this, arrowTitleColor))
+        binding.toolbar.setBackgroundResource(background)
+        binding.llBack.setOnClickListener { v -> finish() }
+    }
 }

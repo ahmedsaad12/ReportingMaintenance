@@ -6,11 +6,13 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import com.app.reportingmaintenance.R
 import com.app.reportingmaintenance.adapter.DataAdapter
 import com.app.reportingmaintenance.databinding.ActivityFacultiesBinding
+import com.app.reportingmaintenance.databinding.ToolbarBinding
 import com.app.reportingmaintenance.model.DataModel
 import com.app.reportingmaintenance.tags.Tags
 import com.app.reportingmaintenance.uis.addfaculty.AddFacultyActivity
@@ -32,6 +34,15 @@ class FacultiesActivity : AppCompatActivity() {
     }
 
     private fun intitView() {
+        setUpToolbar(
+            binding!!.toolbar,
+            "Faculties",
+            R.color.white,
+            R.color.black
+        )
+        binding!!.toolbar.llBack.setOnClickListener {
+            finish()
+        }
         facultyList = mutableListOf()
 
         facultyAdapter=DataAdapter(facultyList!!,this)
@@ -78,5 +89,17 @@ facultyList!!.clear()
         intent.putExtra("faculty_name",dataModel.name)
         startActivity(intent)
     }
-
+    fun setUpToolbar(
+        binding: ToolbarBinding,
+        title: String?,
+        background: Int,
+        arrowTitleColor: Int
+    ) {
+        binding.lang = "en"
+        binding.title = title
+        binding.llBack.setColorFilter(ContextCompat.getColor(this, arrowTitleColor))
+        binding.tvTitle.setTextColor(ContextCompat.getColor(this, arrowTitleColor))
+        binding.toolbar.setBackgroundResource(background)
+        binding.llBack.setOnClickListener { v -> finish() }
+    }
 }

@@ -4,10 +4,12 @@ import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import com.app.reportingmaintenance.R
 import com.app.reportingmaintenance.databinding.ActivityChartsBinding
 import com.app.reportingmaintenance.databinding.ActivityHomeBinding
+import com.app.reportingmaintenance.databinding.ToolbarBinding
 import com.app.reportingmaintenance.model.LoginModel
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
@@ -36,6 +38,15 @@ class ChartsActivity : AppCompatActivity() {
 
     }
     private fun intitView() {
+        setUpToolbar(
+            binding!!.toolbar,
+            "Charts",
+            R.color.white,
+            R.color.black
+        )
+        binding!!.toolbar.llBack.setOnClickListener {
+            finish()
+        }
         getBarChartData()
 
         // on below line we are initializing our bar data set
@@ -70,5 +81,18 @@ class ChartsActivity : AppCompatActivity() {
         barEntriesList.add(BarEntry(4f, 4f))
         barEntriesList.add(BarEntry(5f, 5f))
 
+    }
+    fun setUpToolbar(
+        binding: ToolbarBinding,
+        title: String?,
+        background: Int,
+        arrowTitleColor: Int
+    ) {
+        binding.lang = "en"
+        binding.title = title
+        binding.llBack.setColorFilter(ContextCompat.getColor(this, arrowTitleColor))
+        binding.tvTitle.setTextColor(ContextCompat.getColor(this, arrowTitleColor))
+        binding.toolbar.setBackgroundResource(background)
+        binding.llBack.setOnClickListener { v -> finish() }
     }
 }

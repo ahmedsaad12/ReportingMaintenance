@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.reportingmaintenance.R
@@ -13,6 +14,7 @@ import com.app.reportingmaintenance.adapter.StudentAdapter
 import com.app.reportingmaintenance.adapter.TechnicanAdapter
 import com.app.reportingmaintenance.databinding.ActivityReportsBinding
 import com.app.reportingmaintenance.databinding.ActivityTechniciansBinding
+import com.app.reportingmaintenance.databinding.ToolbarBinding
 import com.app.reportingmaintenance.model.UserModel
 import com.app.reportingmaintenance.tags.Tags
 import com.app.reportingmaintenance.uis.addfaculty.AddFacultyActivity
@@ -35,6 +37,15 @@ class TechnicActivity : AppCompatActivity() {
     }
 
     private fun intitView() {
+        setUpToolbar(
+            binding!!.toolbar,
+            "Technicians",
+            R.color.white,
+            R.color.black
+        )
+        binding!!.toolbar.llBack.setOnClickListener {
+            finish()
+        }
         userList = mutableListOf()
 
         studentAdapter= TechnicanAdapter(userList!!)
@@ -75,5 +86,18 @@ class TechnicActivity : AppCompatActivity() {
                 // ...
             }
         })
+    }
+    fun setUpToolbar(
+        binding: ToolbarBinding,
+        title: String?,
+        background: Int,
+        arrowTitleColor: Int
+    ) {
+        binding.lang = "en"
+        binding.title = title
+        binding.llBack.setColorFilter(ContextCompat.getColor(this, arrowTitleColor))
+        binding.tvTitle.setTextColor(ContextCompat.getColor(this, arrowTitleColor))
+        binding.toolbar.setBackgroundResource(background)
+        binding.llBack.setOnClickListener { v -> finish() }
     }
 }

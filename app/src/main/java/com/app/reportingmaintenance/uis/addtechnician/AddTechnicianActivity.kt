@@ -9,9 +9,11 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import com.app.reportingmaintenance.R
 import com.app.reportingmaintenance.databinding.ActivityAddtechnicianBinding
+import com.app.reportingmaintenance.databinding.ToolbarBinding
 import com.app.reportingmaintenance.model.*
 import com.app.reportingmaintenance.preferences.Preferences
 import com.app.reportingmaintenance.tags.Tags
@@ -38,6 +40,15 @@ private var addDataModel: AddTechnicianModel = AddTechnicianModel();
     }
 
     private fun intitView() {
+        setUpToolbar(
+            binding!!.toolbar,
+            "add Technicians",
+            R.color.white,
+            R.color.black
+        )
+        binding!!.toolbar.llBack.setOnClickListener {
+            finish()
+        }
         preferences = Preferences.newInstance()
 
         disList = mutableListOf()
@@ -129,5 +140,17 @@ disList!!.clear()
             }
         })
     }
-
+    fun setUpToolbar(
+        binding: ToolbarBinding,
+        title: String?,
+        background: Int,
+        arrowTitleColor: Int
+    ) {
+        binding.lang = "en"
+        binding.title = title
+        binding.llBack.setColorFilter(ContextCompat.getColor(this, arrowTitleColor))
+        binding.tvTitle.setTextColor(ContextCompat.getColor(this, arrowTitleColor))
+        binding.toolbar.setBackgroundResource(background)
+        binding.llBack.setOnClickListener { v -> finish() }
+    }
 }

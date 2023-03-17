@@ -3,11 +3,13 @@ package com.app.reportingmaintenance.uis.addfaculty
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import com.app.reportingmaintenance.R
 import com.app.reportingmaintenance.databinding.ActivityAddfacultyBinding
 import com.app.reportingmaintenance.databinding.ActivityLoginBinding
 import com.app.reportingmaintenance.databinding.ActivitySignupBinding
+import com.app.reportingmaintenance.databinding.ToolbarBinding
 import com.app.reportingmaintenance.model.AddDataModel
 import com.app.reportingmaintenance.model.LoginModel
 import com.app.reportingmaintenance.model.SignupModel
@@ -31,6 +33,15 @@ class AddFacultyActivity : AppCompatActivity() {
     }
 
     private fun intitView() {
+        setUpToolbar(
+            binding!!.toolbar,
+            "add Faculty",
+            R.color.white,
+            R.color.black
+        )
+        binding!!.toolbar.llBack.setOnClickListener {
+            finish()
+        }
         dRef = FirebaseDatabase.getInstance().getReference(Tags.DATABASE_NAME)
 
         binding!!.model=addDataModel
@@ -39,6 +50,19 @@ class AddFacultyActivity : AppCompatActivity() {
                 finish()
             }
         })
+    }
+    fun setUpToolbar(
+        binding: ToolbarBinding,
+        title: String?,
+        background: Int,
+        arrowTitleColor: Int
+    ) {
+        binding.lang = "en"
+        binding.title = title
+        binding.llBack.setColorFilter(ContextCompat.getColor(this, arrowTitleColor))
+        binding.tvTitle.setTextColor(ContextCompat.getColor(this, arrowTitleColor))
+        binding.toolbar.setBackgroundResource(background)
+        binding.llBack.setOnClickListener { v -> finish() }
     }
 
 }

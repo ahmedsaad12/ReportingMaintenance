@@ -20,7 +20,7 @@ class AddReportModel : BaseObservable() {
     var idfac = ""
     var idplace = ""
     var periority = ""
-    var image = "";
+    var image = ""
 
     @get:Bindable
     var desc = ""
@@ -44,13 +44,14 @@ class AddReportModel : BaseObservable() {
         }
 
 
-    private fun validate() {
+     fun validate() {
         if (subject.isNotEmpty()
             && iddis.isNotEmpty()
             && idfac.isNotEmpty()
             && idplace.isNotEmpty()
             && periority.isNotEmpty()
             && desc.isNotEmpty()
+            && image.isNotEmpty()
         ) {
 
             error_subject.set(null)
@@ -83,6 +84,9 @@ class AddReportModel : BaseObservable() {
             }
             if (periority.isEmpty()) {
                 Toast.makeText(context, "Choose Periority", Toast.LENGTH_LONG).show()
+            }
+            if (image.isEmpty()) {
+                Toast.makeText(context, "Choose Image", Toast.LENGTH_LONG).show()
             }
             notifyPropertyChanged(BR.isvaild)
         }

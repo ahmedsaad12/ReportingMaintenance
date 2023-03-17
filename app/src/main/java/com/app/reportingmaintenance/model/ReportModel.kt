@@ -13,6 +13,7 @@ data class ReportModel(
     var idplace: String? = "",
     var periority: String? = "",
     var image: String? = "",
+    var status:String?=""
 ){
 
     @Exclude
@@ -27,6 +28,7 @@ data class ReportModel(
             "idplace" to idplace,
             "periority" to periority,
             "image" to image,
+            "status" to status,
         )}
         else{
         return mapOf(
@@ -35,6 +37,7 @@ data class ReportModel(
             "subject" to subject,
             "idfac" to idfac,
             "periority" to periority,
+            "status" to status,
         )
     }}
 }

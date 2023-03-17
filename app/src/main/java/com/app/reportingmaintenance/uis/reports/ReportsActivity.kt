@@ -13,12 +13,15 @@ import androidx.viewpager.widget.ViewPager
 import com.app.reportingmaintenance.R
 import com.app.reportingmaintenance.adapter.MyPagerAdapter
 import com.app.reportingmaintenance.databinding.ActivityReportsBinding
+import com.app.reportingmaintenance.preferences.Preferences
 import com.app.reportingmaintenance.uis.addreport.AddReportsActivity
 import com.app.reportingmaintenance.uis.reports.fragments.FragmentCurrentReport
 import com.app.reportingmaintenance.uis.signup.SignupActivity
 import java.util.concurrent.ThreadLocalRandom.current
 
 class ReportsActivity : AppCompatActivity() {
+    private var preferences: Preferences? = null
+
     private var binding: ActivityReportsBinding? = null
     private var adapter: MyPagerAdapter? = null
     private var fragmentList: MutableList<Fragment>? = null
@@ -33,6 +36,11 @@ class ReportsActivity : AppCompatActivity() {
     }
 
     private fun intitView() {
+        preferences = Preferences.newInstance()
+
+        if (preferences!!.getUserData(this).user_type.equals("admin")) {
+            binding!!.fab.visibility=View.GONE
+        }
         titles = mutableListOf()
         fragmentList = mutableListOf()
 
