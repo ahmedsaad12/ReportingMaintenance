@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.reportingmaintenance.adapter.ReportAdapter
-import com.app.reportingmaintenance.adapter.StudentAdapter
 import com.app.reportingmaintenance.databinding.FragmentReportsBinding
 import com.app.reportingmaintenance.model.ReportModel
 import com.app.reportingmaintenance.model.UserModel
@@ -18,7 +17,7 @@ import com.app.reportingmaintenance.tags.Tags
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.getValue
 
-class FragmentCurrentReport : Fragment() {
+class FragmentPreviousReport : Fragment() {
 
     private lateinit var binding: FragmentReportsBinding
     private var dRef: DatabaseReference? = null
@@ -56,11 +55,11 @@ class FragmentCurrentReport : Fragment() {
 
         val myMostViewedPostsQuery: Query
         if(preferences!!.getUserData(requireActivity()).user_type.equals("client")){
-        myMostViewedPostsQuery = dRef!!.child(Tags.TABLE_REPORTS)
-            .orderByChild("student").equalTo(preferences!!.getUserData(requireActivity()).email!!.replaceAfter("@", "").replace("@", "")).orderByChild("status").equalTo("new")}
+            myMostViewedPostsQuery = dRef!!.child(Tags.TABLE_REPORTS)
+                .orderByChild("student").equalTo(preferences!!.getUserData(requireActivity()).email!!.replaceAfter("@", "").replace("@", "")).orderByChild("status").equalTo("new")}
         else{
             myMostViewedPostsQuery = dRef!!.child(Tags.TABLE_REPORTS).
-                orderByChild("status").equalTo("new")
+            orderByChild("status").equalTo("new")
         }
 
         reportList!!.clear()
@@ -72,7 +71,9 @@ class FragmentCurrentReport : Fragment() {
                     Log.e(ContentValues.TAG, postSnapshot.value.toString())
                     val userModel = postSnapshot.getValue<ReportModel>()
                     dRef!!.child(Tags.TABLE_USERS).child(userModel!!.student!!).get().addOnSuccessListener {
+
                         userModel.student= it.getValue<UserModel>()!!.name
+                        Log.e("ddd",userModel!!.student!!)
                         reportList!!.add(userModel!!)
                     }
 

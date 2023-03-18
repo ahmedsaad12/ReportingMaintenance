@@ -16,6 +16,7 @@ import com.app.reportingmaintenance.databinding.ActivityReportsBinding
 import com.app.reportingmaintenance.preferences.Preferences
 import com.app.reportingmaintenance.uis.addreport.AddReportsActivity
 import com.app.reportingmaintenance.uis.reports.fragments.FragmentCurrentReport
+import com.app.reportingmaintenance.uis.reports.fragments.FragmentPreviousReport
 import com.app.reportingmaintenance.uis.signup.SignupActivity
 import java.util.concurrent.ThreadLocalRandom.current
 
@@ -38,8 +39,8 @@ class ReportsActivity : AppCompatActivity() {
     private fun intitView() {
         preferences = Preferences.newInstance()
 
-        if (preferences!!.getUserData(this).user_type.equals("admin")) {
-            binding!!.fab.visibility=View.GONE
+        if (!preferences!!.getUserData(this).user_type.equals("user")) {
+            binding!!.fab.visibility= VISIBLE
         }
         titles = mutableListOf()
         fragmentList = mutableListOf()
@@ -48,7 +49,7 @@ class ReportsActivity : AppCompatActivity() {
         titles!!.add("previous")
         binding!!.tabs.setupWithViewPager(binding!!.viewPager)
         fragmentList!!.add(FragmentCurrentReport())
-        fragmentList!!.add(FragmentCurrentReport())
+        fragmentList!!.add(FragmentPreviousReport())
         adapter = MyPagerAdapter(
             supportFragmentManager,
             PagerAdapter.POSITION_UNCHANGED,
@@ -57,20 +58,19 @@ class ReportsActivity : AppCompatActivity() {
         )
         binding!!.viewPager.setAdapter(adapter)
         binding!!.viewPager.setOffscreenPageLimit(fragmentList!!.size)
-        binding!!.viewPager.addOnAdapterChangeListener(ViewPager.OnAdapterChangeListener { viewPager, oldAdapter, newAdapter ->
-            if(binding!!.viewPager.currentItem==1){
-                binding!!.fab.visibility=GONE
-            }
-            else{
-                binding!!.fab.visibility=VISIBLE
+        binding!!.viewPager.addOnAdapterChangeListener { viewPager, oldAdapter, newAdapter ->
+            if (binding!!.viewPager.currentItem == 1) {
+                binding!!.fab.visibility = GONE
+            } else {
+                binding!!.fab.visibility = VISIBLE
 
             }
-        })
-        binding!!.fab.setOnClickListener(View.OnClickListener {
+        }
+        binding!!.fab.setOnClickListener {
 
             var intent = Intent(this, AddReportsActivity::class.java)
             startActivity(intent)
 
-        })
+        }
     }
 }

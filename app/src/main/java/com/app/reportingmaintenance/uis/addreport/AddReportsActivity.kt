@@ -27,6 +27,7 @@ import com.app.reportingmaintenance.databinding.ToolbarBinding
 import com.app.reportingmaintenance.model.AddReportModel
 import com.app.reportingmaintenance.model.DataModel
 import com.app.reportingmaintenance.model.ReportModel
+import com.app.reportingmaintenance.preferences.Preferences
 import com.app.reportingmaintenance.share.Common
 import com.app.reportingmaintenance.tags.Tags
 import com.app.reportingmaintenance.uis.places.PlacesActivity
@@ -48,6 +49,7 @@ class AddReportsActivity : AppCompatActivity() {
     private val READ_PERM = Manifest.permission.READ_EXTERNAL_STORAGE
     private val write_permission = Manifest.permission.WRITE_EXTERNAL_STORAGE
     private val camera_permission = Manifest.permission.CAMERA
+
     private var dRef: DatabaseReference? = null
     var disAdapter: ArrayAdapter<String>? = null
 
@@ -56,6 +58,7 @@ class AddReportsActivity : AppCompatActivity() {
 
     private var facList: MutableList<String>? = null
     var placeAdapter: ArrayAdapter<String>? = null
+    private var preferences: Preferences? = null
 
     private var placeList: MutableList<String>? = null
     var peroirityAdapter: ArrayAdapter<String>? = null
@@ -75,6 +78,8 @@ class AddReportsActivity : AppCompatActivity() {
     }
 
     private fun intitView() {
+        preferences = Preferences.newInstance()
+
         addDataModel.context = this
         setUpToolbar(
             binding!!.toolbar,
@@ -402,7 +407,8 @@ class AddReportsActivity : AppCompatActivity() {
             addDataModel.idplace,
             addDataModel.periority,
             uri.path,
-            "new"
+            "new",
+            preferences!!.getUserData(this).email!!.replaceAfter("@", "").replace("@", "")
         )
         val postValues = post.toMap()
         dRef!!.child(Tags.TABLE_REPORTS)
