@@ -37,11 +37,15 @@ class ReportsActivity : AppCompatActivity() {
     }
 
     private fun intitView() {
+        binding!!.llBack.setOnClickListener  {
+            finish()
+        }
         preferences = Preferences.newInstance()
 
         if (!preferences!!.getUserData(this).user_type.equals("user")) {
-            binding!!.fab.visibility= VISIBLE
+            binding!!.fab.visibility= GONE
         }
+
         titles = mutableListOf()
         fragmentList = mutableListOf()
 

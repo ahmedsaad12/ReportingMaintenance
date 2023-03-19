@@ -12,6 +12,7 @@ data class UserModel(
     var name: String? = "",
     var phone: String? = "",
     var user_type: String? = "",
+    var id: String? = "",
 ){
 
     @Exclude
@@ -34,6 +35,7 @@ data class UserModel(
             "name" to name,
 
             "user_type" to user_type,
+            "id" to id
         )
     }}
 }

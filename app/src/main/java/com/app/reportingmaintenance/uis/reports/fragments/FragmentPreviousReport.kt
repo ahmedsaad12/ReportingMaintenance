@@ -44,7 +44,7 @@ class FragmentPreviousReport : Fragment() {
         preferences = Preferences.newInstance()
         reportList = mutableListOf()
 
-        reportAdapter= ReportAdapter(reportList!!)
+        reportAdapter= ReportAdapter(this,reportList!!)
 
         dRef = FirebaseDatabase.getInstance().getReference(Tags.DATABASE_NAME)
         binding.recview.layoutManager = LinearLayoutManager(activity)
@@ -54,12 +54,18 @@ class FragmentPreviousReport : Fragment() {
     private fun getData() {
 
         val myMostViewedPostsQuery: Query
-        if(preferences!!.getUserData(requireActivity()).user_type.equals("client")){
-            myMostViewedPostsQuery = dRef!!.child(Tags.TABLE_REPORTS)
-                .orderByChild("student").equalTo(preferences!!.getUserData(requireActivity()).email!!.replaceAfter("@", "").replace("@", "")).orderByChild("status").equalTo("new")}
-        else{
-            myMostViewedPostsQuery = dRef!!.child(Tags.TABLE_REPORTS).
-            orderByChild("status").equalTo("new")
+        myMostViewedPostsQuery = dRef!!.child(Tags.TABLE_REPORTS)
+            .orderByChild("status").equalTo("previous")
+        if (preferences!!.getUserData(requireActivity()).user_type.equals("user")) {
+            reportAdapter!!.setshow(false)
+
+        } else if (preferences!!.getUserData(requireActivity()).user_type.equals("admin")) {
+            reportAdapter!!.setshow(false)
+
+        } else {
+            reportAdapter!!.setshow(true)
+
+
         }
 
         reportList!!.clear()
@@ -70,16 +76,62 @@ class FragmentPreviousReport : Fragment() {
                     // TODO: handle the post
                     Log.e(ContentValues.TAG, postSnapshot.value.toString())
                     val userModel = postSnapshot.getValue<ReportModel>()
-                    dRef!!.child(Tags.TABLE_USERS).child(userModel!!.student!!).get().addOnSuccessListener {
+                    dRef!!.child(Tags.TABLE_USERS).child(userModel!!.student!!)
+                        .addListenerForSingleValueEvent(object : ValueEventListener {
+                            override fun onDataChange(snapshot: DataSnapshot) {
+                                if (preferences!!.getUserData(requireActivity()).user_type.equals("user")) {
+                                    reportAdapter!!.setshow(false)
+                                    if (userModel.student.equals(
+                                            preferences!!.getUserData(
+                                                requireActivity()
+                                            ).email!!.replaceAfter("@", "").replace("@", "")
+                                        )
+                                    ) {
+                                        userModel.student =
+                                            snapshot.getValue<UserModel>()!!.name.toString()
+                                        reportList!!.add(userModel)
+                                        reportAdapter!!.notifyDataSetChanged()
+                                    }
 
-                        userModel.student= it.getValue<UserModel>()!!.name
-                        Log.e("ddd",userModel!!.student!!)
-                        reportList!!.add(userModel!!)
-                    }
+                                } else if (preferences!!.getUserData(requireActivity()).user_type.equals(
+                                        "admin"
+                                    )
+                                ) {
+                                    reportAdapter!!.setshow(false)
+                                    userModel.student =
+                                        snapshot.getValue<UserModel>()!!.name.toString()
+                                    reportList!!.add(userModel)
+                                    reportAdapter!!.notifyDataSetChanged()
+
+                                } else {
+                                    reportAdapter!!.setshow(true)
+                                    if (userModel.iddis.equals(
+                                            preferences!!.getUserData(
+                                                requireActivity()
+                                            ).id
+                                        )
+                                    ) {
+                                        userModel.student =
+                                            snapshot.getValue<UserModel>()!!.name.toString()
+                                        reportList!!.add(userModel)
+                                        reportAdapter!!.notifyDataSetChanged()
+                                    }
+
+                                }
+
+
+                            }
+
+                            override fun onCancelled(error: DatabaseError) {
+                                TODO("Not yet implemented")
+                            }
+
+                        }
+
+                        )
 
 
                 }
-                reportAdapter!!.notifyDataSetChanged();
             }
 
             override fun onCancelled(databaseError: DatabaseError) {

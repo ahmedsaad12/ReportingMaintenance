@@ -98,7 +98,7 @@ private var addDataModel: AddTechnicianModel = AddTechnicianModel();
     }
 
     private fun setuser() {
-        val post = UserModel("" ,addDataModel.email, addDataModel.password, addDataModel.name,"","tech")
+        val post = UserModel("" ,addDataModel.email, addDataModel.password, addDataModel.name,"","tech",addDataModel.id)
         val postValues = post.toMap()
         dRef!!.child(Tags.TABLE_USERS)
             .child(addDataModel.email.replaceAfter("@", "").replace("@", ""))

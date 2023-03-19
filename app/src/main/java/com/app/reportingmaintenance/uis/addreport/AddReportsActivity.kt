@@ -406,7 +406,7 @@ class AddReportsActivity : AppCompatActivity() {
             addDataModel.idfac,
             addDataModel.idplace,
             addDataModel.periority,
-            uri.path,
+            uri.toString(),
             "new",
             preferences!!.getUserData(this).email!!.replaceAfter("@", "").replace("@", "")
         )
