@@ -14,4 +14,6 @@ object Tags {
     const val TABLE_Places = "Places"
     const val TABLE_DisruptionTypes = "DisruptionTypes"
     const val TABLE_REPORTS = "Reports"
+    //maintenancereporting5@gmail.com
+    //password=123456aAB@
 }
