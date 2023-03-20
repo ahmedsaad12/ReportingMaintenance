@@ -1,5 +1,6 @@
 package com.app.reportingmaintenance.uis.adddisribution
 
+import android.app.ProgressDialog
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -8,8 +9,7 @@ import androidx.databinding.DataBindingUtil
 import com.app.reportingmaintenance.R
 import com.app.reportingmaintenance.databinding.*
 import com.app.reportingmaintenance.model.AddDataModel
-import com.app.reportingmaintenance.model.LoginModel
-import com.app.reportingmaintenance.model.SignupModel
+import com.app.reportingmaintenance.share.Common
 import com.app.reportingmaintenance.tags.Tags
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
@@ -43,7 +43,14 @@ private var addDataModel: AddDataModel = AddDataModel();
 
         binding!!.model=addDataModel
         binding!!.btnLogin.setOnClickListener(View.OnClickListener {
+            val dialog: ProgressDialog = Common.createProgressDialog(
+                this,
+                "wait"
+            )!!
+            dialog.setCancelable(false)
+            dialog.show()
             dRef!!.child(Tags.TABLE_DisruptionTypes).child(addDataModel.name).child("name").setValue(addDataModel.name).addOnFailureListener({}).addOnSuccessListener {
+                dialog.dismiss()
                 finish()
             }
         })

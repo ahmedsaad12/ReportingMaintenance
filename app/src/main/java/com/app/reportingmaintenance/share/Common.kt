@@ -14,11 +14,25 @@ import android.provider.MediaStore
 import android.widget.ProgressBar
 import androidx.core.content.ContextCompat
 import androidx.loader.content.CursorLoader
+import com.app.reportingmaintenance.R
 import java.io.File
 
 object Common {
 
-
+    fun createProgressDialog(context: Context?, msg: String?): ProgressDialog? {
+        val dialog = ProgressDialog(context)
+        dialog.setMessage(msg)
+        dialog.setCancelable(true)
+        dialog.setCanceledOnTouchOutside(false)
+        val bar = ProgressBar(context)
+        val drawable = bar.indeterminateDrawable.mutate()
+        drawable.setColorFilter(
+            ContextCompat.getColor(context!!, R.color.colorAccent),
+            PorterDuff.Mode.SRC_IN
+        )
+        dialog.setIndeterminateDrawable(drawable)
+        return dialog
+    }
     @TargetApi(Build.VERSION_CODES.KITKAT)
     fun getImagePath(context: Context, uri: Uri): String? {
         val currentApiVersion: Int

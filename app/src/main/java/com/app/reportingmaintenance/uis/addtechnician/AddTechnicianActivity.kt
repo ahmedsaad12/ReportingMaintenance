@@ -1,5 +1,6 @@
 package com.app.reportingmaintenance.uis.addtechnician
 
+import android.app.ProgressDialog
 import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
@@ -16,6 +17,7 @@ import com.app.reportingmaintenance.databinding.ActivityAddtechnicianBinding
 import com.app.reportingmaintenance.databinding.ToolbarBinding
 import com.app.reportingmaintenance.model.*
 import com.app.reportingmaintenance.preferences.Preferences
+import com.app.reportingmaintenance.share.Common
 import com.app.reportingmaintenance.tags.Tags
 import com.app.reportingmaintenance.uis.home.HomeActivity
 import com.google.firebase.database.*
@@ -23,6 +25,7 @@ import com.google.firebase.database.ktx.getValue
 
 
 class AddTechnicianActivity : AppCompatActivity() {
+    private lateinit var dialog: ProgressDialog
     private var binding: ActivityAddtechnicianBinding? = null
 private var addDataModel: AddTechnicianModel = AddTechnicianModel();
     private var dRef: DatabaseReference? = null
@@ -70,15 +73,22 @@ private var addDataModel: AddTechnicianModel = AddTechnicianModel();
         getData()
         binding!!.btnLogin.setOnClickListener(View.OnClickListener {
             // Log.e("rrr", loginmodel.email.replaceAfter("@", "").replace("@", ""));
-
+             dialog = Common.createProgressDialog(
+                this,
+                "wait"
+            )!!
+            dialog.setCancelable(false)
+            dialog.show()
             dRef!!.child(Tags.TABLE_USERS)
                 .child(addDataModel.email.replaceAfter("@", "").replace("@", "")).get()
                 .addOnSuccessListener {
                     if (it.value != null) {
+
                         // Log.e("rrr", it.value.toString());
                         val dataSnapshot = (it as DataSnapshot)
                         val userModel = dataSnapshot.getValue<UserModel>()
                         if (userModel!!.email == addDataModel.email ) {
+                            dialog.dismiss()
                             Toast.makeText(this, "user found", Toast.LENGTH_LONG).show()
 
                         } else {
@@ -103,6 +113,7 @@ private var addDataModel: AddTechnicianModel = AddTechnicianModel();
         dRef!!.child(Tags.TABLE_USERS)
             .child(addDataModel.email.replaceAfter("@", "").replace("@", ""))
             .setValue(postValues).addOnSuccessListener {
+                dialog.dismiss()
 //                preferences!!.create_update_userData(this,post)
 //
 //                val intent = Intent(this, HomeActivity::class.java)

@@ -1,6 +1,7 @@
 package com.app.reportingmaintenance.uis.addreport
 
 import android.Manifest
+import android.app.ProgressDialog
 import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -42,6 +43,7 @@ import java.io.File
 
 
 class AddReportsActivity : AppCompatActivity() {
+    private lateinit var dialog: ProgressDialog
     private var storageRef: StorageReference? = null
     private var binding: ActivityAddreportBinding? = null
     private var addDataModel: AddReportModel = AddReportModel()
@@ -155,7 +157,12 @@ class AddReportsActivity : AppCompatActivity() {
         binding!!.btnCancel.setOnClickListener { closeSheet() }
         binding!!.flImage.setOnClickListener { openSheet() }
         binding!!.btnLogin.setOnClickListener {
-
+           dialog = Common.createProgressDialog(
+                this,
+                "wait"
+            )!!
+            dialog.setCancelable(false)
+            dialog.show()
             val file = File(Common.getImagePath(this, uri!!)!!)
 
             val uploadTask = storageRef!!.child("file/${file.name}").putFile(uri!!)
@@ -399,6 +406,7 @@ class AddReportsActivity : AppCompatActivity() {
     }
 
     private fun setuser(uri: Uri) {
+
         val post = ReportModel(
             addDataModel.subject,
             addDataModel.desc,
@@ -414,7 +422,7 @@ class AddReportsActivity : AppCompatActivity() {
         dRef!!.child(Tags.TABLE_REPORTS)
             .child(addDataModel.subject)
             .setValue(postValues).addOnSuccessListener {
-
+                dialog.dismiss()
                 finish()
             }.addOnFailureListener {
                 Toast.makeText(this, "invaild user", Toast.LENGTH_LONG).show()

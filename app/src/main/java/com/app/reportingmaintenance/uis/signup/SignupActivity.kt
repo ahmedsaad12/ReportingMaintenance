@@ -1,5 +1,6 @@
 package com.app.reportingmaintenance.uis.signup
 
+import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -14,6 +15,7 @@ import com.app.reportingmaintenance.model.LoginModel
 import com.app.reportingmaintenance.model.SignupModel
 import com.app.reportingmaintenance.model.UserModel
 import com.app.reportingmaintenance.preferences.Preferences
+import com.app.reportingmaintenance.share.Common
 import com.app.reportingmaintenance.tags.Tags
 import com.app.reportingmaintenance.uis.home.HomeActivity
 import com.google.firebase.database.DataSnapshot
@@ -23,6 +25,8 @@ import com.google.firebase.database.ktx.getValue
 
 
 class SignupActivity : AppCompatActivity() {
+    private lateinit var dialog: ProgressDialog
+
     private var binding: ActivitySignupBinding? = null
     private var dRef: DatabaseReference? = null
     private var preferences: Preferences? = null
@@ -42,7 +46,12 @@ class SignupActivity : AppCompatActivity() {
         binding!!.model=loginmodel
         binding!!.btnLogin.setOnClickListener(View.OnClickListener {
             // Log.e("rrr", loginmodel.email.replaceAfter("@", "").replace("@", ""));
-
+            dialog = Common.createProgressDialog(
+                this,
+                "wait"
+            )!!
+            dialog.setCancelable(false)
+            dialog.show()
             dRef!!.child(Tags.TABLE_USERS)
                 .child(loginmodel.email.replaceAfter("@", "").replace("@", "")).get()
                 .addOnSuccessListener {
@@ -75,6 +84,7 @@ class SignupActivity : AppCompatActivity() {
         dRef!!.child(Tags.TABLE_USERS)
             .child(loginmodel.email.replaceAfter("@", "").replace("@", ""))
             .setValue(postValues).addOnSuccessListener {
+                dialog.dismiss()
                 if(preferences!!.getSession(this)!=Tags.session_login){
                     preferences!!.create_update_userData(this,post)
 

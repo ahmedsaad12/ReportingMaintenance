@@ -1,5 +1,6 @@
 package com.app.reportingmaintenance.uis.login
 
+import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -12,6 +13,7 @@ import com.app.reportingmaintenance.databinding.ActivityLoginBinding
 import com.app.reportingmaintenance.model.LoginModel
 import com.app.reportingmaintenance.model.UserModel
 import com.app.reportingmaintenance.preferences.Preferences
+import com.app.reportingmaintenance.share.Common
 import com.app.reportingmaintenance.tags.Tags
 import com.app.reportingmaintenance.uis.home.HomeActivity
 import com.app.reportingmaintenance.uis.signup.SignupActivity
@@ -56,10 +58,16 @@ class LoginActivity : AppCompatActivity() {
         })
         binding!!.btnLogin.setOnClickListener(View.OnClickListener {
            // Log.e("rrr", loginmodel.email.replaceAfter("@", "").replace("@", ""));
-
+            val dialog: ProgressDialog = Common.createProgressDialog(
+                this,
+                "wait"
+            )!!
+            dialog.setCancelable(false)
+            dialog.show()
             dRef!!.child(Tags.TABLE_USERS)
                 .child(loginmodel.email.replaceAfter("@", "").replace("@", "")).get()
                 .addOnSuccessListener {
+                    dialog.dismiss()
                     if (it.value != null) {
                         Log.e("rrr", it.value.toString());
                         val dataSnapshot = (it as DataSnapshot)

@@ -46,7 +46,7 @@ class StudentActivity : AppCompatActivity() {
         }
         userList = mutableListOf()
 
-        studentAdapter=StudentAdapter(userList!!)
+        studentAdapter=StudentAdapter(this,userList!!)
 
         dRef = FirebaseDatabase.getInstance().getReference(Tags.DATABASE_NAME)
 binding!!.recview.layoutManager = LinearLayoutManager(this)
@@ -97,5 +97,15 @@ binding!!.recview.layoutManager = LinearLayoutManager(this)
         binding.tvTitle.setTextColor(ContextCompat.getColor(this, arrowTitleColor))
         binding.toolbar.setBackgroundResource(background)
         binding.llBack.setOnClickListener { v -> finish() }
+    }
+
+    fun remove(userModel: UserModel) {
+
+        dRef!!.child(Tags.TABLE_USERS).child(userModel.email!!.replaceAfter("@", "").replace("@", "")).removeValue().addOnSuccessListener {
+            userList!!.remove(userModel)
+            studentAdapter!!.notifyDataSetChanged()
+        }
+
+
     }
 }

@@ -1,5 +1,6 @@
 package com.app.reportingmaintenance.uis.addfaculty
 
+import android.app.ProgressDialog
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -13,6 +14,7 @@ import com.app.reportingmaintenance.databinding.ToolbarBinding
 import com.app.reportingmaintenance.model.AddDataModel
 import com.app.reportingmaintenance.model.LoginModel
 import com.app.reportingmaintenance.model.SignupModel
+import com.app.reportingmaintenance.share.Common
 import com.app.reportingmaintenance.tags.Tags
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
@@ -46,7 +48,14 @@ class AddFacultyActivity : AppCompatActivity() {
 
         binding!!.model=addDataModel
         binding!!.btnLogin.setOnClickListener(View.OnClickListener {
+            val dialog: ProgressDialog = Common.createProgressDialog(
+                this,
+                "wait"
+            )!!
+            dialog.setCancelable(false)
+            dialog.show()
             dRef!!.child(Tags.TABLE_Faculties).child(addDataModel.name).child("name").setValue(addDataModel.name).addOnFailureListener({}).addOnSuccessListener {
+               dialog.dismiss()
                 finish()
             }
         })

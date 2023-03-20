@@ -1,12 +1,14 @@
 package com.app.reportingmaintenance.adapter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.app.reportingmaintenance.databinding.TechnicanRowBinding
 import com.app.reportingmaintenance.model.UserModel
+import com.app.reportingmaintenance.uis.technicians.TechnicActivity
 
-class TechnicanAdapter(private val userList: MutableList<UserModel>) :
+class TechnicanAdapter(private val context: Context, private val userList: MutableList<UserModel>) :
     RecyclerView.Adapter<TechnicanViewHolder>() {
     var binding: TechnicanRowBinding? = null
 
@@ -19,6 +21,12 @@ class TechnicanAdapter(private val userList: MutableList<UserModel>) :
     override fun onBindViewHolder(holder: TechnicanViewHolder, position: Int) {
 
         val user = userList[position]
+        binding!!.imremove.setOnClickListener({
+            if(context is TechnicActivity){
+                val activity = context as TechnicActivity
+                activity.remove(userList[holder.layoutPosition])
+            }
+        })
         holder.bind(user)
     }
 

@@ -48,7 +48,7 @@ class TechnicActivity : AppCompatActivity() {
         }
         userList = mutableListOf()
 
-        studentAdapter= TechnicanAdapter(userList!!)
+        studentAdapter= TechnicanAdapter(this,userList!!)
 
         dRef = FirebaseDatabase.getInstance().getReference(Tags.DATABASE_NAME)
         binding!!.recview.layoutManager = LinearLayoutManager(this)
@@ -99,5 +99,14 @@ class TechnicActivity : AppCompatActivity() {
         binding.tvTitle.setTextColor(ContextCompat.getColor(this, arrowTitleColor))
         binding.toolbar.setBackgroundResource(background)
         binding.llBack.setOnClickListener { v -> finish() }
+    }
+    fun remove(userModel: UserModel) {
+
+        dRef!!.child(Tags.TABLE_USERS).child(userModel.email!!.replaceAfter("@", "").replace("@", "")).removeValue().addOnSuccessListener {
+            userList!!.remove(userModel)
+            studentAdapter!!.notifyDataSetChanged()
+        }
+
+
     }
 }

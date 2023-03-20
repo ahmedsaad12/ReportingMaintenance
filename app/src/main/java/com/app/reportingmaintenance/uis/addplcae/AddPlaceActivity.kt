@@ -1,5 +1,6 @@
 package com.app.reportingmaintenance.uis.addplcae
 
+import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -9,6 +10,7 @@ import androidx.databinding.DataBindingUtil
 import com.app.reportingmaintenance.R
 import com.app.reportingmaintenance.databinding.*
 import com.app.reportingmaintenance.model.*
+import com.app.reportingmaintenance.share.Common
 import com.app.reportingmaintenance.tags.Tags
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
@@ -48,9 +50,16 @@ class AddPlaceActivity : AppCompatActivity() {
 
         binding!!.model=addDataModel
         binding!!.btnLogin.setOnClickListener(View.OnClickListener {
+            val dialog: ProgressDialog = Common.createProgressDialog(
+                this,
+                "wait"
+            )!!
+            dialog.setCancelable(false)
+            dialog.show()
             val post = PlaceModel(addDataModel.name,faculty_name)
             val postValues = post.toMap()
             dRef!!.child(Tags.TABLE_Places).child(addDataModel.name).setValue(postValues).addOnFailureListener({}).addOnSuccessListener {
+                dialog.dismiss()
                 finish()
             }
         })
