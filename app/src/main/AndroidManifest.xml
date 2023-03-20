@@ -28,69 +28,83 @@
         tools:targetApi="q">
         <activity
             android:name=".uis.technicians.TechnicActivity"
+            android:configChanges="uiMode"
             android:exported="false">
 
         </activity>
         <activity
             android:name=".uis.faculties.FacultiesActivity"
+            android:configChanges="uiMode"
             android:exported="false">
 
         </activity>
         <activity
             android:name=".uis.students.StudentActivity"
+            android:configChanges="uiMode"
             android:exported="false">
 
         </activity>
         <activity
             android:name=".uis.disruption_typs.DisruptionTypesActivity"
+            android:configChanges="uiMode"
             android:exported="false">
 
         </activity>
         <activity
             android:name=".uis.home.HomeActivity"
+            android:configChanges="uiMode"
             android:exported="false">
 
         </activity>
         <activity
             android:name=".uis.addreport.AddReportsActivity"
+            android:configChanges="uiMode"
             android:exported="false">
 
         </activity>
         <activity
             android:name=".uis.places.PlacesActivity"
+            android:configChanges="uiMode"
             android:exported="false">
 
         </activity>
         <activity
             android:name=".uis.addplcae.AddPlaceActivity"
+            android:configChanges="uiMode"
             android:exported="false">
 
         </activity>
         <activity
             android:name=".uis.addtechnician.AddTechnicianActivity"
+            android:configChanges="uiMode"
             android:exported="false">
 
         </activity>
         <activity
             android:name=".uis.adddisribution.AddDisributionActivity"
+            android:configChanges="uiMode"
             android:exported="false">
 
         </activity>
         <activity
             android:name=".uis.addfaculty.AddFacultyActivity"
+            android:configChanges="uiMode"
             android:exported="false">
 
         </activity>
         <activity
             android:name=".uis.reports.ReportsActivity"
+            android:configChanges="uiMode"
             android:exported="false">
 
         </activity>
         <activity
             android:name=".uis.charts.ChartsActivity"
+            android:configChanges="uiMode"
             android:exported="false"></activity>
         <activity
             android:name=".uis.login.LoginActivity"
+            android:configChanges="uiMode"
             android:exported="true"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
@@ -101,6 +115,7 @@
         </activity>
         <activity
             android:name=".uis.signup.SignupActivity"
+            android:configChanges="uiMode"
             android:exported="true"
             android:windowSoftInputMode="adjustResize" />
     </application>
