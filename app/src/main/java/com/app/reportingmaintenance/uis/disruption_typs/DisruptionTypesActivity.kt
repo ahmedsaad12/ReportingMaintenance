@@ -14,6 +14,8 @@ import com.app.reportingmaintenance.adapter.DataAdapter
 import com.app.reportingmaintenance.databinding.ActivityDisruptionTypsBinding
 import com.app.reportingmaintenance.databinding.ToolbarBinding
 import com.app.reportingmaintenance.model.DataModel
+import com.app.reportingmaintenance.model.ReportModel
+import com.app.reportingmaintenance.model.UserModel
 import com.app.reportingmaintenance.tags.Tags
 import com.app.reportingmaintenance.uis.adddisribution.AddDisributionActivity
 import com.google.firebase.database.*
@@ -97,4 +99,43 @@ disList!!.clear()
         binding.toolbar.setBackgroundResource(background)
         binding.llBack.setOnClickListener { v -> finish() }
     }
+    fun remove(data: DataModel) {
+        val myMostViewedPostsQuery: Query =
+            dRef!!.child(Tags.TABLE_REPORTS).orderByChild("iddis").equalTo(data.name)
+        myMostViewedPostsQuery.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (postSnapshot in snapshot.children) {
+                    val userModel = postSnapshot.getValue<ReportModel>()
+                    dRef!!.child(Tags.TABLE_REPORTS).child(userModel!!.subject!!).removeValue()
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        })
+        val myMostViewedPostsQuery1: Query =
+            dRef!!.child(Tags.TABLE_USERS).orderByChild("id").equalTo(data.name)
+        myMostViewedPostsQuery1.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (postSnapshot in snapshot.children) {
+                    val dataModel = postSnapshot.getValue<UserModel>()
+                    dRef!!.child(Tags.TABLE_USERS).child(dataModel!!.email!!.replaceAfter("@", "").replace("@", "")).removeValue()
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        })
+        dRef!!.child(Tags.TABLE_DisruptionTypes).child(data.name!!).removeValue().addOnSuccessListener {
+            disList!!.remove(data)
+            disAdapter!!.notifyDataSetChanged()
+        }
+
+
+    }
+
 }

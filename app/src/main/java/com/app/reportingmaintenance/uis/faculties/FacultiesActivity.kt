@@ -14,6 +14,8 @@ import com.app.reportingmaintenance.adapter.DataAdapter
 import com.app.reportingmaintenance.databinding.ActivityFacultiesBinding
 import com.app.reportingmaintenance.databinding.ToolbarBinding
 import com.app.reportingmaintenance.model.DataModel
+import com.app.reportingmaintenance.model.ReportModel
+import com.app.reportingmaintenance.model.UserModel
 import com.app.reportingmaintenance.tags.Tags
 import com.app.reportingmaintenance.uis.addfaculty.AddFacultyActivity
 import com.app.reportingmaintenance.uis.places.PlacesActivity
@@ -102,4 +104,43 @@ facultyList!!.clear()
         binding.toolbar.setBackgroundResource(background)
         binding.llBack.setOnClickListener { v -> finish() }
     }
+    fun remove(data: DataModel) {
+        val myMostViewedPostsQuery: Query =
+            dRef!!.child(Tags.TABLE_REPORTS).orderByChild("idfac").equalTo(data.name)
+        myMostViewedPostsQuery.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (postSnapshot in snapshot.children) {
+                    val userModel = postSnapshot.getValue<ReportModel>()
+                    dRef!!.child(Tags.TABLE_REPORTS).child(userModel!!.subject!!).removeValue()
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        })
+        val myMostViewedPostsQuery1: Query =
+            dRef!!.child(Tags.TABLE_Places).orderByChild("faculty_name").equalTo(data.name)
+        myMostViewedPostsQuery1.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (postSnapshot in snapshot.children) {
+                    val dataModel = postSnapshot.getValue<DataModel>()
+                    dRef!!.child(Tags.TABLE_Places).child(dataModel!!.name!!).removeValue()
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        })
+        dRef!!.child(Tags.TABLE_Faculties).child(data.name!!).removeValue().addOnSuccessListener {
+            facultyList!!.remove(data)
+            facultyAdapter!!.notifyDataSetChanged()
+        }
+
+
+    }
+
 }

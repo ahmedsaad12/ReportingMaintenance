@@ -13,6 +13,7 @@ import com.app.reportingmaintenance.R
 import com.app.reportingmaintenance.adapter.StudentAdapter
 import com.app.reportingmaintenance.databinding.ActivityStudentsBinding
 import com.app.reportingmaintenance.databinding.ToolbarBinding
+import com.app.reportingmaintenance.model.ReportModel
 import com.app.reportingmaintenance.model.UserModel
 import com.app.reportingmaintenance.tags.Tags
 import com.app.reportingmaintenance.uis.signup.SignupActivity
@@ -100,7 +101,21 @@ binding!!.recview.layoutManager = LinearLayoutManager(this)
     }
 
     fun remove(userModel: UserModel) {
+        val myMostViewedPostsQuery: Query =
+            dRef!!.child(Tags.TABLE_REPORTS).orderByChild("student").equalTo(userModel.email!!.replaceAfter("@", "").replace("@", ""))
+        myMostViewedPostsQuery.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (postSnapshot in snapshot.children) {
+                    val userModel = postSnapshot.getValue<ReportModel>()
+                    dRef!!.child(Tags.TABLE_REPORTS).child(userModel!!.subject!!).removeValue()
+                }
+            }
 
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        })
         dRef!!.child(Tags.TABLE_USERS).child(userModel.email!!.replaceAfter("@", "").replace("@", "")).removeValue().addOnSuccessListener {
             userList!!.remove(userModel)
             studentAdapter!!.notifyDataSetChanged()

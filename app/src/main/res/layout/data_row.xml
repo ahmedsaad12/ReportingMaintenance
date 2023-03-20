@@ -28,6 +28,13 @@
             android:orientation="vertical">
 
 
+            <ImageView
+                android:id="@+id/imremove"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@android:drawable/ic_delete"
+                android:layout_gravity="end"
+                />
 
 
             <LinearLayout

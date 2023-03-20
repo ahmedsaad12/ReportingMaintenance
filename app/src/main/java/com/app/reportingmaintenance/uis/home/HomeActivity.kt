@@ -14,6 +14,7 @@ import com.app.reportingmaintenance.preferences.Preferences
 import com.app.reportingmaintenance.uis.charts.ChartsActivity
 import com.app.reportingmaintenance.uis.disruption_typs.DisruptionTypesActivity
 import com.app.reportingmaintenance.uis.faculties.FacultiesActivity
+import com.app.reportingmaintenance.uis.login.LoginActivity
 import com.app.reportingmaintenance.uis.reports.ReportsActivity
 import com.app.reportingmaintenance.uis.students.StudentActivity
 import com.app.reportingmaintenance.uis.technicians.TechnicActivity
@@ -41,7 +42,12 @@ class HomeActivity : AppCompatActivity() {
             finish()
         }
         preferences = Preferences.newInstance()
-
+binding!!.cardLogout.setOnClickListener({
+    preferences!!.clear(this)
+    var intent = Intent(this, LoginActivity::class.java)
+    startActivity(intent)
+    finish()
+})
         if (!preferences!!.getUserData(this).user_type.equals("admin")) {
             binding!!.cardCharts.visibility = View.GONE
             binding!!.cardTech.visibility = View.GONE
