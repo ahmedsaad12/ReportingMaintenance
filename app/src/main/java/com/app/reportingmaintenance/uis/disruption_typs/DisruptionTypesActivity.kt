@@ -58,7 +58,7 @@ class DisruptionTypesActivity : AppCompatActivity() {
             startActivity(intent)
 
         })
-        getData()
+      //  getData()
     }
 
     private fun getData() {
