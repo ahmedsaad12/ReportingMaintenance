@@ -49,7 +49,7 @@ class FragmentPreviousReport : Fragment() {
         dRef = FirebaseDatabase.getInstance().getReference(Tags.DATABASE_NAME)
         binding.recview.layoutManager = LinearLayoutManager(activity)
         binding.recview.adapter=reportAdapter
-        getData()
+       // getData()
     }
     private fun getData() {
 
