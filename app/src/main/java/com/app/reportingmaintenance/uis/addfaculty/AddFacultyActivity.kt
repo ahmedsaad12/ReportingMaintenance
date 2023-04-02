@@ -47,7 +47,7 @@ class AddFacultyActivity : AppCompatActivity() {
         dRef = FirebaseDatabase.getInstance().getReference(Tags.DATABASE_NAME)
 
         binding!!.model=addDataModel
-        binding!!.btnLogin.setOnClickListener(View.OnClickListener {
+      /*  binding!!.btnLogin.setOnClickListener(View.OnClickListener {
             val dialog: ProgressDialog = Common.createProgressDialog(
                 this,
                 "wait"
@@ -58,7 +58,7 @@ class AddFacultyActivity : AppCompatActivity() {
                dialog.dismiss()
                 finish()
             }
-        })
+        })*/
     }
     fun setUpToolbar(
         binding: ToolbarBinding,
