@@ -59,7 +59,7 @@ class TechnicActivity : AppCompatActivity() {
             startActivity(intent)
 
         })
-        getData()
+      //  getData()
     }
 
     private fun getData() {
