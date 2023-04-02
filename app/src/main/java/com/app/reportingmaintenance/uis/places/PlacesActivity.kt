@@ -65,7 +65,7 @@ class PlacesActivity : AppCompatActivity() {
             startActivity(intent)
 
         })
-        getData()
+      //  getData()
     }
 
     private fun getData() {
