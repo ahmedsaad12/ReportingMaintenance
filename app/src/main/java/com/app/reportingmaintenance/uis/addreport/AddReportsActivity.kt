@@ -156,7 +156,7 @@ class AddReportsActivity : AppCompatActivity() {
 
         binding!!.btnCancel.setOnClickListener { closeSheet() }
         binding!!.flImage.setOnClickListener { openSheet() }
-        binding!!.btnLogin.setOnClickListener {
+     /*   binding!!.btnLogin.setOnClickListener {
            dialog = Common.createProgressDialog(
                 this,
                 "wait"
@@ -178,7 +178,7 @@ class AddReportsActivity : AppCompatActivity() {
             }.addOnFailureListener {
                 Log.e("Firebase", "Image Upload fail")
             }
-        }
+        }*/
         binding!!.spType.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(adapterView: AdapterView<*>?, view: View, i: Int, l: Long) {
 
@@ -220,8 +220,8 @@ class AddReportsActivity : AppCompatActivity() {
 
             override fun onNothingSelected(adapterView: AdapterView<*>?) {}
         }
-        getData()
-        getFac()
+      //  getData()
+      //  getFac()
     }
 
     private fun getData() {
