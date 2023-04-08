@@ -58,7 +58,7 @@ class FacultiesActivity : AppCompatActivity() {
             startActivity(intent)
 
         })
-        getData()
+      //  getData()
     }
 
     private fun getData() {

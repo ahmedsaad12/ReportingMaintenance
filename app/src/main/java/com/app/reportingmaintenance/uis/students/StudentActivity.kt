@@ -58,7 +58,7 @@ binding!!.recview.layoutManager = LinearLayoutManager(this)
             startActivity(intent)
 
         })
-        getData()
+       // getData()
     }
 
     private fun getData() {

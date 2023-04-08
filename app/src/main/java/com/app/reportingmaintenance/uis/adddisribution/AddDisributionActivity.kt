@@ -42,7 +42,7 @@ private var addDataModel: AddDataModel = AddDataModel();
         dRef = FirebaseDatabase.getInstance().getReference(Tags.DATABASE_NAME)
 
         binding!!.model=addDataModel
-        binding!!.btnLogin.setOnClickListener(View.OnClickListener {
+      /*  binding!!.btnLogin.setOnClickListener(View.OnClickListener {
             val dialog: ProgressDialog = Common.createProgressDialog(
                 this,
                 "wait"
@@ -53,7 +53,7 @@ private var addDataModel: AddDataModel = AddDataModel();
                 dialog.dismiss()
                 finish()
             }
-        })
+        })*/
 
     }
     fun setUpToolbar(

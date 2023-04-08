@@ -74,7 +74,7 @@ private var addDataModel: AddTechnicianModel = AddTechnicianModel();
 
             override fun onNothingSelected(adapterView: AdapterView<*>?) {}
         }
-        getData()
+       /* getData()
         binding!!.btnLogin.setOnClickListener(View.OnClickListener {
             // Log.e("rrr", loginmodel.email.replaceAfter("@", "").replace("@", ""));
              dialog = Common.createProgressDialog(
@@ -107,7 +107,7 @@ private var addDataModel: AddTechnicianModel = AddTechnicianModel();
 
             //
 
-        })
+        })*/
 
     }
 
