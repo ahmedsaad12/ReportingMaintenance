@@ -46,7 +46,7 @@ class AddTechnicianModel : BaseObservable() {
 
 
     private fun validate() {
-        if (Patterns.EMAIL_ADDRESS.matcher(email).matches() && password.isNotEmpty()&&password.length>=6&&name.isNotEmpty()
+        if (Patterns.EMAIL_ADDRESS.matcher(email).matches()&&email.endsWith("@taibahu.edu.sa")  && password.isNotEmpty()&&password.length>=6&&name.isNotEmpty()
             &&id.isNotEmpty()
         ) {
 
@@ -57,7 +57,7 @@ class AddTechnicianModel : BaseObservable() {
             notifyPropertyChanged(BR.isvaild)
         } else {
             isvaild = false
-            if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+            if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()||!email.endsWith("@taibahu.edu.sa") ){
                 error_email.set("Invaild Email")
             }
             else{

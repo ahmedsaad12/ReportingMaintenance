@@ -17,6 +17,7 @@ import com.app.reportingmaintenance.share.Common
 import com.app.reportingmaintenance.tags.Tags
 import com.app.reportingmaintenance.uis.home.HomeActivity
 import com.app.reportingmaintenance.uis.signup.SignupActivity
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
@@ -28,6 +29,7 @@ class LoginActivity : AppCompatActivity() {
     private var loginmodel: LoginModel = LoginModel()
     private var dRef: DatabaseReference? = null
     private var preferences: Preferences? = null
+    private var auth: FirebaseAuth? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +42,8 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun intitView() {
+        auth= FirebaseAuth.getInstance()
+
         preferences = Preferences.newInstance()
         if(preferences!!.getSession(this)==Tags.session_login){
             val intent = Intent(this, HomeActivity::class.java)
@@ -73,11 +77,24 @@ class LoginActivity : AppCompatActivity() {
                         val dataSnapshot = (it as DataSnapshot)
                         val userModel = dataSnapshot.getValue<UserModel>()
                         if (userModel!!.email == loginmodel.email && userModel.password == loginmodel.password) {
-                            preferences!!.create_update_userData(this,userModel)
+auth!!.signInWithEmailAndPassword(loginmodel.email,loginmodel.password).addOnCompleteListener {
+    if(it.isSuccessful){
+        if(auth!!.currentUser!!.isEmailVerified){
 
-                            val intent = Intent(this, HomeActivity::class.java)
-                            startActivity(intent)
-                            finish()
+            preferences!!.create_update_userData(this,userModel)
+
+            val intent = Intent(this, HomeActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+        else{
+            Toast.makeText(this, "please verfaiy your email", Toast.LENGTH_LONG).show()
+
+        }
+    }
+}
+
+
                         } else {
                             Toast.makeText(this, "invaild user", Toast.LENGTH_LONG).show()
                         }

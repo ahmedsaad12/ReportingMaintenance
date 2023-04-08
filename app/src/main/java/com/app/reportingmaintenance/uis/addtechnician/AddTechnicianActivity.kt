@@ -20,6 +20,7 @@ import com.app.reportingmaintenance.preferences.Preferences
 import com.app.reportingmaintenance.share.Common
 import com.app.reportingmaintenance.tags.Tags
 import com.app.reportingmaintenance.uis.home.HomeActivity
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.getValue
 
@@ -31,6 +32,7 @@ private var addDataModel: AddTechnicianModel = AddTechnicianModel();
     private var dRef: DatabaseReference? = null
   var disAdapter :ArrayAdapter<String>?=null
     private var preferences: Preferences? = null
+    private var auth: FirebaseAuth? = null
 
     private var disList:MutableList<String>?= null
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,6 +45,8 @@ private var addDataModel: AddTechnicianModel = AddTechnicianModel();
     }
 
     private fun intitView() {
+        auth= FirebaseAuth.getInstance()
+
         setUpToolbar(
             binding!!.toolbar,
             "add Technicians",
@@ -118,7 +122,28 @@ private var addDataModel: AddTechnicianModel = AddTechnicianModel();
 //
 //                val intent = Intent(this, HomeActivity::class.java)
 //                startActivity(intent)
-                finish()
+                auth!!.createUserWithEmailAndPassword(addDataModel.email, addDataModel.password).addOnCompleteListener {
+
+                    auth!!.currentUser!!.sendEmailVerification().addOnCompleteListener {
+                        if(it.isSuccessful){
+                           // Toast.makeText(this, "check your email", Toast.LENGTH_LONG).show()
+                            finish()
+//                            if(preferences!!.getSession(this)!=Tags.session_login){
+//                    preferences!!.create_update_userData(this,post)
+////
+//                    val intent = Intent(this, HomeActivity::class.java)
+//                    startActivity(intent)
+//                        }
+                        }
+                    }
+
+//
+//                }
+
+                    finish()
+                }
+
+
             }.addOnFailureListener {
                 Toast.makeText(this, "invaild user", Toast.LENGTH_LONG).show()
 

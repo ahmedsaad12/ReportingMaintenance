@@ -22,6 +22,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.getValue
+import com.google.firebase.auth.FirebaseAuth
 
 
 class SignupActivity : AppCompatActivity() {
@@ -29,6 +30,7 @@ class SignupActivity : AppCompatActivity() {
 
     private var binding: ActivitySignupBinding? = null
     private var dRef: DatabaseReference? = null
+    private var auth: FirebaseAuth? = null
     private var preferences: Preferences? = null
     private var loginmodel: SignupModel = SignupModel();
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,6 +43,7 @@ class SignupActivity : AppCompatActivity() {
     }
 
     private fun intitView() {
+        auth=FirebaseAuth.getInstance()
         dRef = FirebaseDatabase.getInstance().getReference(Tags.DATABASE_NAME)
         preferences = Preferences.newInstance()
         binding!!.model=loginmodel
@@ -60,6 +63,7 @@ class SignupActivity : AppCompatActivity() {
                         val dataSnapshot = (it as DataSnapshot)
                         val userModel = dataSnapshot.getValue<UserModel>()
                         if (userModel!!.email == loginmodel.email ) {
+                            dialog.dismiss()
                             Toast.makeText(this, "user found", Toast.LENGTH_LONG).show()
 
                         } else {
@@ -85,15 +89,28 @@ class SignupActivity : AppCompatActivity() {
             .child(loginmodel.email.replaceAfter("@", "").replace("@", ""))
             .setValue(postValues).addOnSuccessListener {
                 dialog.dismiss()
-                if(preferences!!.getSession(this)!=Tags.session_login){
-                    preferences!!.create_update_userData(this,post)
+                auth!!.createUserWithEmailAndPassword(loginmodel.email, loginmodel.password).addOnCompleteListener {
 
-                    val intent = Intent(this, HomeActivity::class.java)
-                    startActivity(intent)
+                    auth!!.currentUser!!.sendEmailVerification().addOnCompleteListener {
+                        if(it.isSuccessful){
+                            Toast.makeText(this, "check your email", Toast.LENGTH_LONG).show()
+                            finish()
+//                            if(preferences!!.getSession(this)!=Tags.session_login){
+//                    preferences!!.create_update_userData(this,post)
+////
+//                    val intent = Intent(this, HomeActivity::class.java)
+//                    startActivity(intent)
+//                        }
+                    }
                 }
 
-                finish()
-            }.addOnFailureListener {
+//
+//                }
+
+
+            }
+            }
+                    .addOnFailureListener {
                 Toast.makeText(this, "invaild user", Toast.LENGTH_LONG).show()
 
             }
