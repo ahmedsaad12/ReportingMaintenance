@@ -59,7 +59,7 @@ class TechnicActivity : AppCompatActivity() {
             startActivity(intent)
 
         })
-      //  getData()
+        getData()
     }
 
     private fun getData() {
@@ -102,7 +102,7 @@ class TechnicActivity : AppCompatActivity() {
     }
     fun remove(userModel: UserModel) {
 
-        dRef!!.child(Tags.TABLE_USERS).child(userModel.email!!.replaceAfter("@", "").replace("@", "")).removeValue().addOnSuccessListener {
+        dRef!!.child(Tags.TABLE_USERS).child(userModel.id!!).removeValue().addOnSuccessListener {
             userList!!.remove(userModel)
             studentAdapter!!.notifyDataSetChanged()
         }

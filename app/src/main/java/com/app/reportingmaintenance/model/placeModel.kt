@@ -7,8 +7,10 @@ import com.google.firebase.database.IgnoreExtraProperties
 @IgnoreExtraProperties
 data class PlaceModel(
 
+    var id: String? = "",
     var name: String? = "",
-    var faculty_name: String? = "",
+    var faculty_id: String? = "",
+
 
 ){
 
@@ -17,9 +19,10 @@ data class PlaceModel(
 
         return mapOf(
 
+            "id" to id,
             "name" to name,
 
-            "faculty_name" to faculty_name,
+            "faculty_id" to faculty_id,
         )
     }
 }

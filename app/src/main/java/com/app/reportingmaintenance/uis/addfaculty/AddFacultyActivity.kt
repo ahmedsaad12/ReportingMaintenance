@@ -12,12 +12,14 @@ import com.app.reportingmaintenance.databinding.ActivityLoginBinding
 import com.app.reportingmaintenance.databinding.ActivitySignupBinding
 import com.app.reportingmaintenance.databinding.ToolbarBinding
 import com.app.reportingmaintenance.model.AddDataModel
+import com.app.reportingmaintenance.model.DataModel
 import com.app.reportingmaintenance.model.LoginModel
 import com.app.reportingmaintenance.model.SignupModel
 import com.app.reportingmaintenance.share.Common
 import com.app.reportingmaintenance.tags.Tags
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import java.util.*
 
 
 class AddFacultyActivity : AppCompatActivity() {
@@ -47,18 +49,20 @@ class AddFacultyActivity : AppCompatActivity() {
         dRef = FirebaseDatabase.getInstance().getReference(Tags.DATABASE_NAME)
 
         binding!!.model=addDataModel
-      /*  binding!!.btnLogin.setOnClickListener(View.OnClickListener {
+        binding!!.btnLogin.setOnClickListener(View.OnClickListener {
+            var id=random()
+            val post = DataModel(id,addDataModel.name)
             val dialog: ProgressDialog = Common.createProgressDialog(
                 this,
                 "wait"
             )!!
             dialog.setCancelable(false)
             dialog.show()
-            dRef!!.child(Tags.TABLE_Faculties).child(addDataModel.name).child("name").setValue(addDataModel.name).addOnFailureListener({}).addOnSuccessListener {
+            dRef!!.child(Tags.TABLE_Faculties).child(id).setValue(post.toMap()).addOnFailureListener({}).addOnSuccessListener {
                dialog.dismiss()
                 finish()
             }
-        })*/
+        })
     }
     fun setUpToolbar(
         binding: ToolbarBinding,
@@ -73,5 +77,14 @@ class AddFacultyActivity : AppCompatActivity() {
         binding.toolbar.setBackgroundResource(background)
         binding.llBack.setOnClickListener { v -> finish() }
     }
-
+    protected fun random(): String {
+        val SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+        val salt = StringBuilder()
+        val rnd = Random()
+        while (salt.length < 18) {
+            val index = (rnd.nextFloat() * SALTCHARS.length).toInt()
+            salt.append(SALTCHARS[index])
+        }
+        return salt.toString()
+    }
 }

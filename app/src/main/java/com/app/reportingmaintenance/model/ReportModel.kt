@@ -6,6 +6,7 @@ import com.google.firebase.database.IgnoreExtraProperties
 
 @IgnoreExtraProperties
 data class ReportModel(
+    var id: String? = "",
     var subject: String? = "",
     var desc: String? = "",
     var iddis: String? = "",
@@ -14,7 +15,7 @@ data class ReportModel(
     var periority: String? = "",
     var image: String? = "",
     var status: String? = "",
-    var student: String? = ""
+    var studentid: String? = ""
 ) {
 
     @Exclude
@@ -22,6 +23,7 @@ data class ReportModel(
         if (image!!.isNotEmpty()) {
 
             return mapOf(
+                "id" to id,
                 "desc" to desc,
                 "iddis" to iddis,
                 "subject" to subject,
@@ -30,17 +32,18 @@ data class ReportModel(
                 "periority" to periority,
                 "image" to image,
                 "status" to status,
-                "student" to student,
+                "studentid" to studentid,
             )
         } else {
             return mapOf(
+                "id" to id,
                 "desc" to desc,
                 "iddis" to iddis,
                 "subject" to subject,
                 "idfac" to idfac,
                 "periority" to periority,
                 "status" to status,
-                "student" to student,
+                "studentid" to studentid,
             )
         }
     }

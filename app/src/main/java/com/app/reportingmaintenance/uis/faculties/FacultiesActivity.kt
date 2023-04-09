@@ -21,6 +21,7 @@ import com.app.reportingmaintenance.uis.addfaculty.AddFacultyActivity
 import com.app.reportingmaintenance.uis.places.PlacesActivity
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.getValue
+import java.util.*
 
 class FacultiesActivity : AppCompatActivity() {
     private var binding: ActivityFacultiesBinding? = null
@@ -58,7 +59,7 @@ class FacultiesActivity : AppCompatActivity() {
             startActivity(intent)
 
         })
-      //  getData()
+        getData()
     }
 
     private fun getData() {
@@ -88,7 +89,7 @@ facultyList!!.clear()
 
     fun showPlaces(dataModel: DataModel) {
         var intent = Intent(this, PlacesActivity::class.java)
-        intent.putExtra("faculty_name",dataModel.name)
+        intent.putExtra("faculty_id",dataModel.id)
         startActivity(intent)
     }
     fun setUpToolbar(
@@ -106,12 +107,12 @@ facultyList!!.clear()
     }
     fun remove(data: DataModel) {
         val myMostViewedPostsQuery: Query =
-            dRef!!.child(Tags.TABLE_REPORTS).orderByChild("idfac").equalTo(data.name)
+            dRef!!.child(Tags.TABLE_REPORTS).orderByChild("idfac").equalTo(data.id)
         myMostViewedPostsQuery.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 for (postSnapshot in snapshot.children) {
                     val userModel = postSnapshot.getValue<ReportModel>()
-                    dRef!!.child(Tags.TABLE_REPORTS).child(userModel!!.subject!!).removeValue()
+                    dRef!!.child(Tags.TABLE_REPORTS).child(userModel!!.id!!).removeValue()
                 }
             }
 
@@ -121,12 +122,12 @@ facultyList!!.clear()
 
         })
         val myMostViewedPostsQuery1: Query =
-            dRef!!.child(Tags.TABLE_Places).orderByChild("faculty_name").equalTo(data.name)
+            dRef!!.child(Tags.TABLE_Places).orderByChild("faculty_id").equalTo(data.id)
         myMostViewedPostsQuery1.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 for (postSnapshot in snapshot.children) {
                     val dataModel = postSnapshot.getValue<DataModel>()
-                    dRef!!.child(Tags.TABLE_Places).child(dataModel!!.name!!).removeValue()
+                    dRef!!.child(Tags.TABLE_Places).child(dataModel!!.id!!).removeValue()
                 }
             }
 

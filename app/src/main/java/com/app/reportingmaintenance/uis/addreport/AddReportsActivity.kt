@@ -40,6 +40,7 @@ import com.google.firebase.storage.ktx.storage
 import com.squareup.picasso.Picasso
 import java.io.ByteArrayOutputStream
 import java.io.File
+import java.util.*
 
 
 class AddReportsActivity : AppCompatActivity() {
@@ -56,13 +57,16 @@ class AddReportsActivity : AppCompatActivity() {
     var disAdapter: ArrayAdapter<String>? = null
 
     private var disList: MutableList<String>? = null
+    private var disidList: MutableList<String>? = null
     var facAdapter: ArrayAdapter<String>? = null
 
     private var facList: MutableList<String>? = null
+    private var facListid: MutableList<String>? = null
     var placeAdapter: ArrayAdapter<String>? = null
     private var preferences: Preferences? = null
 
     private var placeList: MutableList<String>? = null
+    private var placeListid: MutableList<String>? = null
     var peroirityAdapter: ArrayAdapter<String>? = null
 
     private var peroirityList: MutableList<String>? = null
@@ -96,10 +100,13 @@ class AddReportsActivity : AppCompatActivity() {
 
         storageRef = Firebase.storage(Tags.Bucket_NAME).reference
         disList = mutableListOf()
+        disidList = mutableListOf()
         disAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, disList!!)
         facList = mutableListOf()
+        facListid = mutableListOf()
         facAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, facList!!)
         placeList = mutableListOf()
+        placeListid = mutableListOf()
         placeAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, placeList!!)
         peroirityList = mutableListOf()
         peroirityList!!.add("hehi")
@@ -156,7 +163,7 @@ class AddReportsActivity : AppCompatActivity() {
 
         binding!!.btnCancel.setOnClickListener { closeSheet() }
         binding!!.flImage.setOnClickListener { openSheet() }
-     /*   binding!!.btnLogin.setOnClickListener {
+        binding!!.btnLogin.setOnClickListener {
            dialog = Common.createProgressDialog(
                 this,
                 "wait"
@@ -178,11 +185,11 @@ class AddReportsActivity : AppCompatActivity() {
             }.addOnFailureListener {
                 Log.e("Firebase", "Image Upload fail")
             }
-        }*/
+        }
         binding!!.spType.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(adapterView: AdapterView<*>?, view: View, i: Int, l: Long) {
 
-                addDataModel.iddis = disList!![i];
+                addDataModel.iddis = disidList!![i];
 
                 binding!!.model = addDataModel
             }
@@ -192,7 +199,7 @@ class AddReportsActivity : AppCompatActivity() {
         binding!!.spFac.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(adapterView: AdapterView<*>?, view: View, i: Int, l: Long) {
 
-                addDataModel.idfac = facList!![i];
+                addDataModel.idfac = facListid!![i];
 
                 binding!!.model = addDataModel
                 getplace()
@@ -203,7 +210,7 @@ class AddReportsActivity : AppCompatActivity() {
         binding!!.spplace.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(adapterView: AdapterView<*>?, view: View, i: Int, l: Long) {
 
-                addDataModel.idplace = placeList!![i];
+                addDataModel.idplace = placeListid!![i]
 
                 binding!!.model = addDataModel
             }
@@ -220,8 +227,8 @@ class AddReportsActivity : AppCompatActivity() {
 
             override fun onNothingSelected(adapterView: AdapterView<*>?) {}
         }
-      //  getData()
-      //  getFac()
+        getData()
+        getFac()
     }
 
     private fun getData() {
@@ -237,6 +244,7 @@ class AddReportsActivity : AppCompatActivity() {
                     val dataModel = postSnapshot.getValue<DataModel>()
 
                     disList!!.add(dataModel!!.name!!);
+                    disidList!!.add(dataModel.id!!);
 
                 }
                 disAdapter!!.notifyDataSetChanged()
@@ -265,6 +273,7 @@ class AddReportsActivity : AppCompatActivity() {
                     val dataModel = postSnapshot.getValue<DataModel>()
 
                     facList!!.add(dataModel!!.name!!);
+                    facListid!!.add(dataModel.id!!);
 
                 }
                 facAdapter!!.notifyDataSetChanged()
@@ -281,7 +290,7 @@ class AddReportsActivity : AppCompatActivity() {
     }
 
     private fun getplace() {
-        val myMostViewedPostsQuery = dRef!!.child(Tags.TABLE_Places).orderByChild("faculty_name")
+        val myMostViewedPostsQuery = dRef!!.child(Tags.TABLE_Places).orderByChild("faculty_id")
             .equalTo(addDataModel.idfac);
         placeList!!.clear()
         myMostViewedPostsQuery.addValueEventListener(object : ValueEventListener {
@@ -294,6 +303,7 @@ class AddReportsActivity : AppCompatActivity() {
                     val dataModel = postSnapshot.getValue<DataModel>()
 
                     placeList!!.add(dataModel!!.name!!);
+                    placeListid!!.add(dataModel.id!!);
 
                 }
                 placeAdapter!!.notifyDataSetChanged()
@@ -406,8 +416,10 @@ class AddReportsActivity : AppCompatActivity() {
     }
 
     private fun setuser(uri: Uri) {
+        var id=random()
 
         val post = ReportModel(
+            id,
             addDataModel.subject,
             addDataModel.desc,
             addDataModel.iddis,
@@ -416,7 +428,7 @@ class AddReportsActivity : AppCompatActivity() {
             addDataModel.periority,
             uri.toString(),
             "new",
-            preferences!!.getUserData(this).email!!.replaceAfter("@", "").replace("@", "")
+            preferences!!.getUserData(this).id
         )
         val postValues = post.toMap()
         dRef!!.child(Tags.TABLE_REPORTS)
@@ -442,5 +454,15 @@ class AddReportsActivity : AppCompatActivity() {
         binding.tvTitle.setTextColor(ContextCompat.getColor(this, arrowTitleColor))
         binding.toolbar.setBackgroundResource(background)
         binding.llBack.setOnClickListener { v -> finish() }
+    }
+    protected fun random(): String {
+        val SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+        val salt = StringBuilder()
+        val rnd = Random()
+        while (salt.length < 18) {
+            val index = (rnd.nextFloat() * SALTCHARS.length).toInt()
+            salt.append(SALTCHARS[index])
+        }
+        return salt.toString()
     }
 }

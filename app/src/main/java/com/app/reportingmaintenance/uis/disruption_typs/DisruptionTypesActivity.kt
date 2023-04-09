@@ -58,7 +58,7 @@ class DisruptionTypesActivity : AppCompatActivity() {
             startActivity(intent)
 
         })
-      //  getData()
+        getData()
     }
 
     private fun getData() {
@@ -101,12 +101,12 @@ disList!!.clear()
     }
     fun remove(data: DataModel) {
         val myMostViewedPostsQuery: Query =
-            dRef!!.child(Tags.TABLE_REPORTS).orderByChild("iddis").equalTo(data.name)
+            dRef!!.child(Tags.TABLE_REPORTS).orderByChild("iddis").equalTo(data.id)
         myMostViewedPostsQuery.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 for (postSnapshot in snapshot.children) {
                     val userModel = postSnapshot.getValue<ReportModel>()
-                    dRef!!.child(Tags.TABLE_REPORTS).child(userModel!!.subject!!).removeValue()
+                    dRef!!.child(Tags.TABLE_REPORTS).child(userModel!!.id!!).removeValue()
                 }
             }
 
@@ -116,12 +116,12 @@ disList!!.clear()
 
         })
         val myMostViewedPostsQuery1: Query =
-            dRef!!.child(Tags.TABLE_USERS).orderByChild("id").equalTo(data.name)
+            dRef!!.child(Tags.TABLE_USERS).orderByChild("disid").equalTo(data.id)
         myMostViewedPostsQuery1.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 for (postSnapshot in snapshot.children) {
                     val dataModel = postSnapshot.getValue<UserModel>()
-                    dRef!!.child(Tags.TABLE_USERS).child(dataModel!!.email!!.replaceAfter("@", "").replace("@", "")).removeValue()
+                    dRef!!.child(Tags.TABLE_USERS).child(dataModel!!.id!!).removeValue()
                 }
             }
 

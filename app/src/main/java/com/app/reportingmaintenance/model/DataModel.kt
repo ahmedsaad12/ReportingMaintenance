@@ -7,6 +7,7 @@ import com.google.firebase.database.IgnoreExtraProperties
 @IgnoreExtraProperties
 data class DataModel(
 
+    var id: String? = "",
     var name: String? = "",
 
 ){
@@ -15,6 +16,7 @@ data class DataModel(
     fun toMap(): Map<String, Any?> {
         return mapOf(
 
+            "id" to id,
             "name" to name,
 
         )

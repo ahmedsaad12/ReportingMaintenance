@@ -6,13 +6,14 @@ import com.google.firebase.database.IgnoreExtraProperties
 
 @IgnoreExtraProperties
 data class UserModel(
+    var id: String? = "",
     var studentNumber: String? = "",
     var email: String? = "",
     var password: String? = "",
     var name: String? = "",
     var phone: String? = "",
     var user_type: String? = "",
-    var id: String? = "",
+    var disid: String? = "",
 ){
 
     @Exclude
@@ -20,6 +21,7 @@ data class UserModel(
         if( studentNumber!!.isNotEmpty()){
 
         return  mapOf(
+            "id" to id,
             "email" to email,
             "password" to password,
             "studentNumber" to studentNumber,
@@ -29,13 +31,15 @@ data class UserModel(
         )}
         else{
         return mapOf(
+            "id" to id,
             "email" to email,
             "password" to password,
 
             "name" to name,
 
             "user_type" to user_type,
-            "id" to id
+
+            "disid" to disid
         )
     }}
 }

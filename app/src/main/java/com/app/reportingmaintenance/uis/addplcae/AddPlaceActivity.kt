@@ -14,12 +14,13 @@ import com.app.reportingmaintenance.share.Common
 import com.app.reportingmaintenance.tags.Tags
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import java.util.*
 
 
 class AddPlaceActivity : AppCompatActivity() {
     private var binding: ActivityAddplaceBinding? = null
     private var dRef: DatabaseReference? = null
-    private var faculty_name=""
+    private var faculty_id=""
 
     private var addDataModel: AddDataModel = AddDataModel();
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,7 +35,7 @@ class AddPlaceActivity : AppCompatActivity() {
     private fun getDataFromIntent() {
         var intent: Intent
         intent= getIntent()
-        faculty_name= intent.getStringExtra("faculty_name")!!
+        faculty_id= intent.getStringExtra("faculty_id")!!
     }
     private fun intitView() {
         setUpToolbar(
@@ -49,20 +50,21 @@ class AddPlaceActivity : AppCompatActivity() {
         dRef = FirebaseDatabase.getInstance().getReference(Tags.DATABASE_NAME)
 
         binding!!.model=addDataModel
-       /* binding!!.btnLogin.setOnClickListener(View.OnClickListener {
+        binding!!.btnLogin.setOnClickListener(View.OnClickListener {
+            var id=random()
             val dialog: ProgressDialog = Common.createProgressDialog(
                 this,
                 "wait"
             )!!
             dialog.setCancelable(false)
             dialog.show()
-            val post = PlaceModel(addDataModel.name,faculty_name)
+            val post = PlaceModel(id,addDataModel.name,faculty_id)
             val postValues = post.toMap()
-            dRef!!.child(Tags.TABLE_Places).child(addDataModel.name).setValue(postValues).addOnFailureListener({}).addOnSuccessListener {
+            dRef!!.child(Tags.TABLE_Places).child(id).setValue(postValues).addOnFailureListener({}).addOnSuccessListener {
                 dialog.dismiss()
                 finish()
             }
-        })*/
+        })
     }
     fun setUpToolbar(
         binding: ToolbarBinding,
@@ -77,5 +79,14 @@ class AddPlaceActivity : AppCompatActivity() {
         binding.toolbar.setBackgroundResource(background)
         binding.llBack.setOnClickListener { v -> finish() }
     }
-
+    protected fun random(): String {
+        val SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+        val salt = StringBuilder()
+        val rnd = Random()
+        while (salt.length < 18) {
+            val index = (rnd.nextFloat() * SALTCHARS.length).toInt()
+            salt.append(SALTCHARS[index])
+        }
+        return salt.toString()
+    }
 }

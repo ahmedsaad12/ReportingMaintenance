@@ -1,6 +1,7 @@
 package com.app.reportingmaintenance.uis.signup
 
 import android.app.ProgressDialog
+import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -18,11 +19,10 @@ import com.app.reportingmaintenance.preferences.Preferences
 import com.app.reportingmaintenance.share.Common
 import com.app.reportingmaintenance.tags.Tags
 import com.app.reportingmaintenance.uis.home.HomeActivity
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.getValue
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
+import java.util.*
 
 
 class SignupActivity : AppCompatActivity() {
@@ -32,6 +32,7 @@ class SignupActivity : AppCompatActivity() {
     private var dRef: DatabaseReference? = null
     private var auth: FirebaseAuth? = null
     private var preferences: Preferences? = null
+    private var isadd:Boolean=true
     private var loginmodel: SignupModel = SignupModel();
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,24 +57,49 @@ class SignupActivity : AppCompatActivity() {
             dialog.setCancelable(false)
             dialog.show()
             dRef!!.child(Tags.TABLE_USERS)
-                .child(loginmodel.email.replaceAfter("@", "").replace("@", "")).get()
-                .addOnSuccessListener {
-                    if (it.value != null) {
-                       // Log.e("rrr", it.value.toString());
-                        val dataSnapshot = (it as DataSnapshot)
-                        val userModel = dataSnapshot.getValue<UserModel>()
-                        if (userModel!!.email == loginmodel.email ) {
-                            dialog.dismiss()
-                            Toast.makeText(this, "user found", Toast.LENGTH_LONG).show()
+                .orderByChild("email").equalTo(loginmodel.email).addValueEventListener  (object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        // Log.e("rrr", snapshot.value.toString());
+                        if(snapshot.value!=null){
+                            for (postSnapshot in snapshot.children) {
+                                val userModel = postSnapshot.getValue<UserModel>()
+                                Log.e(ContentValues.TAG, postSnapshot.value.toString())
+                                if (userModel!=null) {
 
-                        } else {
-                            setuser()
+                                    //   Log.e("rrr", it.value.toString());
+
+                                    if (userModel!!.email == loginmodel.email&&isadd ) {
+                                        dialog.dismiss()
+                                        Toast.makeText(baseContext, "user found", Toast.LENGTH_LONG).show()
+
+                                    } else {
+                                        if(isadd){
+                                            isadd=false
+                                            setuser()}
+                                    }
+                                } else {
+                                    if(isadd){
+                                        isadd=false
+                                        setuser()}
+
+                                }
+                            }
+                        }else{
+                            if(isadd){
+                                isadd=false
+                                setuser()}
                         }
-                    } else {
-                        setuser()
 
                     }
-                }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        TODO("Not yet implemented")
+                    }
+
+                })
+
+
+
 
 
             //
@@ -83,10 +109,12 @@ class SignupActivity : AppCompatActivity() {
     }
 
     private fun setuser() {
-        val post = UserModel(loginmodel.studentNumber, loginmodel.email, loginmodel.password, loginmodel.name,loginmodel.phone,"user")
+        var id=random()
+
+        val post = UserModel(id,loginmodel.studentNumber, loginmodel.email, loginmodel.password, loginmodel.name,loginmodel.phone,"user")
         val postValues = post.toMap()
         dRef!!.child(Tags.TABLE_USERS)
-            .child(loginmodel.email.replaceAfter("@", "").replace("@", ""))
+            .child(id)
             .setValue(postValues).addOnSuccessListener {
                 dialog.dismiss()
                 auth!!.createUserWithEmailAndPassword(loginmodel.email, loginmodel.password).addOnCompleteListener {
@@ -115,5 +143,14 @@ class SignupActivity : AppCompatActivity() {
 
             }
     }
-
+    protected fun random(): String {
+        val SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+        val salt = StringBuilder()
+        val rnd = Random()
+        while (salt.length < 18) {
+            val index = (rnd.nextFloat() * SALTCHARS.length).toInt()
+            salt.append(SALTCHARS[index])
+        }
+        return salt.toString()
+    }
 }

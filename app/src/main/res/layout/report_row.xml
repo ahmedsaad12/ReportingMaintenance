@@ -59,7 +59,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="5dp"
                     android:layout_marginEnd="5dp"
-                    android:text="@{model.student}"
+                    android:text="@{model.studentid}"
                     android:textColor="@color/black"
                     android:textSize="14sp" />
             </LinearLayout>

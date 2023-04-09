@@ -78,29 +78,30 @@ class FragmentCurrentReport : Fragment() {
                     // TODO: handle the post
                     Log.e(ContentValues.TAG, postSnapshot.value.toString())
                     val userModel = postSnapshot.getValue<ReportModel>()
-                    dRef!!.child(Tags.TABLE_USERS).child(userModel!!.student!!)
+                    dRef!!.child(Tags.TABLE_USERS).child(userModel!!.studentid!!)
                         .addListenerForSingleValueEvent(object : ValueEventListener {
                             override fun onDataChange(snapshot: DataSnapshot) {
                                 if (preferences!!.getUserData(requireActivity()).user_type.equals("user")) {
                                     reportAdapter!!.setshow(false)
-                                    if (userModel.student.equals(
+                                    if (userModel.studentid.equals(
                                             preferences!!.getUserData(
                                                 requireActivity()
-                                            ).email!!.replaceAfter("@", "").replace("@", "")
+                                            ).id
                                         )
                                     ) {
-                                        userModel.student =
+                                        userModel.studentid =
                                             snapshot.getValue<UserModel>()!!.name.toString()
                                         reportList!!.add(userModel)
                                         reportAdapter!!.notifyDataSetChanged()
                                     }
 
-                                } else if (preferences!!.getUserData(requireActivity()).user_type.equals(
+                                }
+                                else if (preferences!!.getUserData(requireActivity()).user_type.equals(
                                         "admin"
                                     )
                                 ) {
                                     reportAdapter!!.setshow(false)
-                                    userModel.student =
+                                    userModel.studentid =
                                         snapshot.getValue<UserModel>()!!.name.toString()
                                     reportList!!.add(userModel)
                                     reportAdapter!!.notifyDataSetChanged()
@@ -110,10 +111,10 @@ class FragmentCurrentReport : Fragment() {
                                     if (userModel.iddis.equals(
                                             preferences!!.getUserData(
                                                 requireActivity()
-                                            ).id
+                                            ).disid
                                         )
                                     ) {
-                                        userModel.student =
+                                        userModel.studentid =
                                             snapshot.getValue<UserModel>()!!.name.toString()
                                         reportList!!.add(userModel)
                                         reportAdapter!!.notifyDataSetChanged()

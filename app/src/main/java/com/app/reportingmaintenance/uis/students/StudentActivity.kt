@@ -58,7 +58,7 @@ binding!!.recview.layoutManager = LinearLayoutManager(this)
             startActivity(intent)
 
         })
-       // getData()
+       getData()
     }
 
     private fun getData() {
@@ -102,8 +102,9 @@ binding!!.recview.layoutManager = LinearLayoutManager(this)
 
     fun remove(userModel: UserModel) {
         val myMostViewedPostsQuery: Query =
-            dRef!!.child(Tags.TABLE_REPORTS).orderByChild("student").equalTo(userModel.email!!.replaceAfter("@", "").replace("@", ""))
-        myMostViewedPostsQuery.addValueEventListener(object : ValueEventListener {
+            dRef!!.child(Tags.TABLE_REPORTS).orderByChild("studentid").equalTo(userModel.id!!)
+        myMostViewedPostsQuery.addValueEventListener(
+            object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 for (postSnapshot in snapshot.children) {
                     val userModel = postSnapshot.getValue<ReportModel>()
@@ -116,7 +117,7 @@ binding!!.recview.layoutManager = LinearLayoutManager(this)
             }
 
         })
-        dRef!!.child(Tags.TABLE_USERS).child(userModel.email!!.replaceAfter("@", "").replace("@", "")).removeValue().addOnSuccessListener {
+        dRef!!.child(Tags.TABLE_USERS).child(userModel.id!!).removeValue().addOnSuccessListener {
             userList!!.remove(userModel)
             studentAdapter!!.notifyDataSetChanged()
         }

@@ -16,7 +16,7 @@ class AddTechnicianModel : BaseObservable() {
     lateinit var  context:Context
     @get:Bindable
     var isvaild = false
-    var id = ""
+    var disid = ""
     @get:Bindable
     var email = ""
         set(value) {
@@ -47,7 +47,7 @@ class AddTechnicianModel : BaseObservable() {
 
     private fun validate() {
         if (Patterns.EMAIL_ADDRESS.matcher(email).matches()&&email.endsWith("@taibahu.edu.sa")  && password.isNotEmpty()&&password.length>=6&&name.isNotEmpty()
-            &&id.isNotEmpty()
+            &&disid.isNotEmpty()
         ) {
 
             error_name.set(null)
@@ -75,7 +75,7 @@ class AddTechnicianModel : BaseObservable() {
                 error_name.set(null)
             }
 
-if(id.isEmpty()){
+if(disid.isEmpty()){
     Toast.makeText(context,"Choose type",Toast.LENGTH_LONG).show()
 }
             notifyPropertyChanged(BR.isvaild)

@@ -18,9 +18,7 @@ import com.app.reportingmaintenance.tags.Tags
 import com.app.reportingmaintenance.uis.home.HomeActivity
 import com.app.reportingmaintenance.uis.signup.SignupActivity
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 import com.google.firebase.database.ktx.getValue
 
 
@@ -69,40 +67,64 @@ class LoginActivity : AppCompatActivity() {
             dialog.setCancelable(false)
             dialog.show()
             dRef!!.child(Tags.TABLE_USERS)
-                .child(loginmodel.email.replaceAfter("@", "").replace("@", "")).get()
-                .addOnSuccessListener {
-                    dialog.dismiss()
-                    if (it.value != null) {
-                        Log.e("rrr", it.value.toString());
-                        val dataSnapshot = (it as DataSnapshot)
-                        val userModel = dataSnapshot.getValue<UserModel>()
-                        if (userModel!!.email == loginmodel.email && userModel.password == loginmodel.password) {
-auth!!.signInWithEmailAndPassword(loginmodel.email,loginmodel.password).addOnCompleteListener {
-    if(it.isSuccessful){
-        if(auth!!.currentUser!!.isEmailVerified){
+                .orderByChild("email").equalTo(loginmodel.email).addValueEventListener(object :ValueEventListener{
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        dialog.dismiss()
+                        if (snapshot.value != null) {
+                            Log.e("rrr", snapshot.value.toString());
+                            for (postSnapshot in snapshot.children) {
+                            val userModel = postSnapshot.getValue<UserModel>()
+                            if (userModel!!.email == loginmodel.email && userModel.password == loginmodel.password) {
+                                if(userModel.user_type=="admin"){
+                                    preferences!!.create_update_userData(baseContext,userModel)
 
-            preferences!!.create_update_userData(this,userModel)
+                                    val intent = Intent(baseContext, HomeActivity::class.java)
+                                    startActivity(intent)
+                                    finish()
+                                }else {
+                                    auth!!.signInWithEmailAndPassword(
+                                        loginmodel.email,
+                                        loginmodel.password
+                                    ).addOnCompleteListener {
+                                        if (it.isSuccessful) {
+//                                        if (auth!!.currentUser!!.isEmailVerified) {
 
-            val intent = Intent(this, HomeActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
-        else{
-            Toast.makeText(this, "please verfaiy your email", Toast.LENGTH_LONG).show()
+                                            preferences!!.create_update_userData(baseContext, userModel)
 
-        }
-    }
-}
+                                            val intent = Intent(baseContext, HomeActivity::class.java)
+                                            startActivity(intent)
+                                            finish()
+//                                        }
+//                                        else {
+//                                            Toast.makeText(
+//                                                this,
+//                                                "please verfaiy your email",
+//                                                Toast.LENGTH_LONG
+//                                            ).show()
+//
+//                                        }
+                                        }
+                                    }
+                                }
 
-
+                            }
+//                            else {
+//                                Toast.makeText(baseContext, "invaild user", Toast.LENGTH_LONG).show()
+//                            }
+                            }
                         } else {
-                            Toast.makeText(this, "invaild user", Toast.LENGTH_LONG).show()
+                            Toast.makeText(baseContext, "invaild user", Toast.LENGTH_LONG).show()
+
                         }
-                    } else {
-                        Toast.makeText(this, "invaild user", Toast.LENGTH_LONG).show()
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        TODO("Not yet implemented")
+                        Toast.makeText(baseContext, "invaild user", Toast.LENGTH_LONG).show()
 
                     }
-                }
+
+                })
 
             //
 
