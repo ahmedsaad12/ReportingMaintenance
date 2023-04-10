@@ -87,22 +87,22 @@ class LoginActivity : AppCompatActivity() {
                                         loginmodel.password
                                     ).addOnCompleteListener {
                                         if (it.isSuccessful) {
-//                                        if (auth!!.currentUser!!.isEmailVerified) {
+                                        if (auth!!.currentUser!!.isEmailVerified) {
 
                                             preferences!!.create_update_userData(baseContext, userModel)
 
                                             val intent = Intent(baseContext, HomeActivity::class.java)
                                             startActivity(intent)
                                             finish()
-//                                        }
-//                                        else {
-//                                            Toast.makeText(
-//                                                this,
-//                                                "please verfaiy your email",
-//                                                Toast.LENGTH_LONG
-//                                            ).show()
-//
-//                                        }
+                                        }
+                                        else {
+                                            Toast.makeText(
+                                                baseContext,
+                                                "please verfaiy your email",
+                                                Toast.LENGTH_LONG
+                                            ).show()
+
+                                        }
                                         }
                                     }
                                 }
