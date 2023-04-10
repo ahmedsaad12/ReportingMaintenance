@@ -433,7 +433,7 @@ class AddReportsActivity : AppCompatActivity() {
         )
         val postValues = post.toMap()
         dRef!!.child(Tags.TABLE_REPORTS)
-            .child(addDataModel.subject)
+            .child(id)
             .setValue(postValues).addOnSuccessListener {
                 dialog.dismiss()
                 finish()
