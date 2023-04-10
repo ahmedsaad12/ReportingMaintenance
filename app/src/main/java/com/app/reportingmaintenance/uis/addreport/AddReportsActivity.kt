@@ -31,6 +31,7 @@ import com.app.reportingmaintenance.model.ReportModel
 import com.app.reportingmaintenance.preferences.Preferences
 import com.app.reportingmaintenance.share.Common
 import com.app.reportingmaintenance.tags.Tags
+import com.app.reportingmaintenance.uis.addplcae.AddPlaceActivity
 import com.app.reportingmaintenance.uis.places.PlacesActivity
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.getValue
@@ -147,8 +148,8 @@ class AddReportsActivity : AppCompatActivity() {
             }
         }
         binding!!.btnadd.setOnClickListener {
-            var intent = Intent(this, PlacesActivity::class.java)
-            intent.putExtra("faculty_name", addDataModel.idfac)
+            var intent = Intent(this, AddPlaceActivity::class.java)
+            intent.putExtra("faculty_id", addDataModel.idfac)
             startActivity(intent)
         }
         binding!!.flGallery.setOnClickListener {

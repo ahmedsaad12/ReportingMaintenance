@@ -25,7 +25,7 @@ class PlacesActivity : AppCompatActivity() {
     private var dRef: DatabaseReference? = null
     private var placeAdapter: DataAdapter? = null
     private var placeList:MutableList<DataModel>?= null
-    private var faculty_name=""
+    private var faculty_id=""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 // Remember that you should never show the action bar if the
@@ -38,7 +38,7 @@ class PlacesActivity : AppCompatActivity() {
     private fun getDataFromIntent() {
         var intent: Intent
         intent= getIntent()
-        faculty_name= intent.getStringExtra("faculty_name")!!
+        faculty_id= intent.getStringExtra("faculty_id")!!
     }
 
     private fun intitView() {
@@ -61,16 +61,16 @@ class PlacesActivity : AppCompatActivity() {
         binding!!.fab.setOnClickListener(View.OnClickListener {
 
             var intent = Intent(this, AddPlaceActivity::class.java)
-            intent.putExtra("faculty_name",faculty_name)
+            intent.putExtra("faculty_id",faculty_id)
             startActivity(intent)
 
         })
-      //  getData()
+        getData()
     }
 
     private fun getData() {
         val myMostViewedPostsQuery = dRef!!.child(Tags.TABLE_Places)
-            .orderByChild("faculty_name").equalTo(faculty_name);
+            .orderByChild("faculty_id").equalTo(faculty_id);
         placeList!!.clear()
         myMostViewedPostsQuery.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
