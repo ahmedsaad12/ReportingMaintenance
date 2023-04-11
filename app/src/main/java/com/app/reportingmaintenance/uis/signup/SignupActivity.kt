@@ -68,7 +68,7 @@ class SignupActivity : AppCompatActivity() {
 
                                     //   Log.e("rrr", it.value.toString());
 
-                                    if (userModel!!.email == loginmodel.email&&isadd ) {
+                                    if (userModel.email == loginmodel.email&&isadd ) {
                                         dialog.dismiss()
                                         Toast.makeText(baseContext, "user found", Toast.LENGTH_LONG).show()
 
