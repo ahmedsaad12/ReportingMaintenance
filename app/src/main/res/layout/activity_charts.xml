@@ -16,11 +16,10 @@
             android:layout_height="0dp"
             android:layout_weight="1">
 
-            <com.github.mikephil.charting.charts.BarChart
-                android:id="@+id/idBarChart"
+            <lecho.lib.hellocharts.view.PieChartView
+                android:id="@+id/chart"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                />
+                android:layout_height="match_parent" />
         </FrameLayout>
     </LinearLayout>
 </layout>

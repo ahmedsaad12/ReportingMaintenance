@@ -2,6 +2,7 @@ package com.app.reportingmaintenance.uis.home
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -13,6 +14,8 @@ import com.app.reportingmaintenance.databinding.ToolbarBinding
 import com.app.reportingmaintenance.preferences.Preferences
 import com.app.reportingmaintenance.uis.charts.ChartsActivity
 import com.app.reportingmaintenance.uis.disruption_typs.DisruptionTypesActivity
+import com.app.reportingmaintenance.uis.editstudent.EditStudentActivity
+import com.app.reportingmaintenance.uis.edittechnician.EditTechnicianActivity
 import com.app.reportingmaintenance.uis.faculties.FacultiesActivity
 import com.app.reportingmaintenance.uis.login.LoginActivity
 import com.app.reportingmaintenance.uis.reports.ReportsActivity
@@ -44,19 +47,32 @@ class HomeActivity : AppCompatActivity() {
             finish()
         }
         preferences = Preferences.newInstance()
-binding!!.cardLogout.setOnClickListener({
-    preferences!!.clear(this)
-    var intent = Intent(this, LoginActivity::class.java)
-    startActivity(intent)
-    finish()
-})
-        binding!!.cardLogout1.setOnClickListener({
-    preferences!!.clear(this)
-    var intent = Intent(this, LoginActivity::class.java)
-    startActivity(intent)
-    finish()
-})
+        binding!!.cardLogout.setOnClickListener {
+            preferences!!.clear(this)
+            var intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+        binding!!.cardLogout1.setOnClickListener {
+            preferences!!.clear(this)
+            var intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+        binding!!.cardEdit.setOnClickListener {
+            if (preferences!!.getUserData(this).user_type == "user") {
+                var intent = Intent(this, EditStudentActivity::class.java)
+                startActivity(intent)
+            }
+            else{
+                var intent = Intent(this, EditTechnicianActivity::class.java)
+                startActivity(intent)
+            }
+
+            //  finish()
+        }
         if (!preferences!!.getUserData(this).user_type.equals("admin")) {
+         //  Log.e("uuu",preferences!!.getUserData(this).user_type!!)
             binding!!.cardCharts.visibility = View.GONE
             binding!!.cardTech.visibility = View.GONE
             binding!!.cardDis.visibility = View.GONE
@@ -73,6 +89,11 @@ binding!!.cardLogout.setOnClickListener({
             binding!!.view4.visibility = View.GONE
             binding!!.view5.visibility = View.GONE
 
+
+        }
+        else{
+            binding!!.cardEdit.visibility = View.GONE
+            binding!!.view7.visibility = View.GONE
 
         }
         binding!!.cardCharts.setOnClickListener(View.OnClickListener {
@@ -143,7 +164,7 @@ binding!!.cardLogout.setOnClickListener({
     ) {
         binding.lang = "en"
         binding.title = title
-        binding.llBack.visibility=View.GONE
+        binding.llBack.visibility = View.GONE
         binding.llBack.setColorFilter(ContextCompat.getColor(this, arrowTitleColor))
         binding.tvTitle.setTextColor(ContextCompat.getColor(this, arrowTitleColor))
         binding.toolbar.setBackgroundResource(background)

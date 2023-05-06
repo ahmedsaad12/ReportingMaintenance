@@ -26,65 +26,91 @@
         android:usesCleartextTraffic="true"
         tools:ignore="AllowBackup"
         tools:targetApi="q">
-        <activity
-            android:name=".MainActivity"
-            android:exported="false"
-            android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
+
         <activity
             android:name=".uis.technicians.TechnicActivity"
             android:configChanges="uiMode"
-            android:exported="false"></activity>
+            android:exported="false">
+
+        </activity>
+        <activity
+            android:name=".uis.edittechnician.EditTechnicianActivity"
+            android:configChanges="uiMode"
+            android:exported="false">
+
+        </activity>
         <activity
             android:name=".uis.faculties.FacultiesActivity"
             android:configChanges="uiMode"
-            android:exported="false"></activity>
+            android:exported="false">
+
+        </activity>
         <activity
             android:name=".uis.students.StudentActivity"
             android:configChanges="uiMode"
-            android:exported="false"></activity>
+            android:exported="false">
+
+        </activity>
         <activity
             android:name=".uis.disruption_typs.DisruptionTypesActivity"
             android:configChanges="uiMode"
-            android:exported="false"></activity>
+            android:exported="false">
+
+        </activity>
         <activity
             android:name=".uis.home.HomeActivity"
             android:configChanges="uiMode"
-            android:exported="false"></activity>
+            android:exported="false">
+
+        </activity>
         <activity
             android:name=".uis.addreport.AddReportsActivity"
             android:configChanges="uiMode"
-            android:exported="false"></activity>
+            android:exported="false">
+
+        </activity>
         <activity
             android:name=".uis.places.PlacesActivity"
             android:configChanges="uiMode"
-            android:exported="false"></activity>
+            android:exported="false">
+
+        </activity>
         <activity
             android:name=".uis.addplcae.AddPlaceActivity"
             android:configChanges="uiMode"
-            android:exported="false"></activity>
+            android:exported="false">
+
+        </activity>
         <activity
             android:name=".uis.addtechnician.AddTechnicianActivity"
             android:configChanges="uiMode"
-            android:exported="false"></activity>
+            android:exported="false">
+
+        </activity>
         <activity
             android:name=".uis.adddisribution.AddDisributionActivity"
             android:configChanges="uiMode"
-            android:exported="false"></activity>
+            android:exported="false">
+
+        </activity>
         <activity
             android:name=".uis.addfaculty.AddFacultyActivity"
             android:configChanges="uiMode"
-            android:exported="false"></activity>
+            android:exported="false">
+
+        </activity>
         <activity
             android:name=".uis.reports.ReportsActivity"
             android:configChanges="uiMode"
-            android:exported="false"></activity>
+            android:exported="false">
+
+        </activity>
         <activity
             android:name=".uis.charts.ChartsActivity"
+            android:configChanges="uiMode"
+            android:exported="false" />
+        <activity
+            android:name=".uis.editstudent.EditStudentActivity"
             android:configChanges="uiMode"
             android:exported="false" />
         <activity

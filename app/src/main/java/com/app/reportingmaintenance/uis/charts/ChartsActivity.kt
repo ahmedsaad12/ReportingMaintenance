@@ -1,33 +1,38 @@
 package com.app.reportingmaintenance.uis.charts
 
+import android.content.ContentValues
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
+import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import com.app.reportingmaintenance.R
 import com.app.reportingmaintenance.databinding.ActivityChartsBinding
-import com.app.reportingmaintenance.databinding.ActivityHomeBinding
 import com.app.reportingmaintenance.databinding.ToolbarBinding
-import com.app.reportingmaintenance.model.LoginModel
-import com.github.mikephil.charting.data.BarData
-import com.github.mikephil.charting.data.BarDataSet
-import com.github.mikephil.charting.data.BarEntry
+import com.app.reportingmaintenance.model.ReportModel
+import com.app.reportingmaintenance.model.UserModel
+import com.app.reportingmaintenance.tags.Tags
+import com.google.firebase.database.*
+import com.google.firebase.database.ktx.getValue
+import lecho.lib.hellocharts.model.PieChartData
+import lecho.lib.hellocharts.model.SliceValue
+
 
 class ChartsActivity : AppCompatActivity() {
     private var binding: ActivityChartsBinding? = null
+    private var dRef: DatabaseReference? = null
+    private var newlowreportList: MutableList<ReportModel>? = null
+    private var newmediumreportList: MutableList<ReportModel>? = null
+    private var newhighreportList: MutableList<ReportModel>? = null
+    private var finishmediumreportList: MutableList<ReportModel>? = null
+    private var finishlowreportList: MutableList<ReportModel>? = null
+    private var finishthighreportList: MutableList<ReportModel>? = null
 
+    //    private var reportList: MutableList<ReportModel>? = null
     // on below line we are creating
     // a variable for bar data
-    lateinit var barData: BarData
-
-    // on below line we are creating a
-    // variable for bar data set
-    lateinit var barDataSet: BarDataSet
-
-    // on below line we are creating array list for bar data
-    lateinit var barEntriesList: ArrayList<BarEntry>
+    var pieData: MutableList<SliceValue?>? = ArrayList()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 // Remember that you should never show the action bar if the
@@ -37,7 +42,17 @@ class ChartsActivity : AppCompatActivity() {
         intitView()
 
     }
+
     private fun intitView() {
+        newlowreportList = mutableListOf()
+        newmediumreportList = mutableListOf()
+        newhighreportList = mutableListOf()
+        finishlowreportList = mutableListOf()
+        finishmediumreportList = mutableListOf()
+        finishthighreportList = mutableListOf()
+
+
+        dRef = FirebaseDatabase.getInstance().getReference(Tags.DATABASE_NAME)
         setUpToolbar(
             binding!!.toolbar,
             "Charts",
@@ -47,41 +62,13 @@ class ChartsActivity : AppCompatActivity() {
         binding!!.toolbar.llBack.setOnClickListener {
             finish()
         }
-        getBarChartData()
+              // on below line we are initializing our bar data set
+getData()
 
-        // on below line we are initializing our bar data set
-        barDataSet = BarDataSet(barEntriesList, "Bar Chart Data")
-
-        // on below line we are initializing our bar data
-        barData = BarData(barDataSet)
-
-        // on below line we are setting data to our bar chart
-        binding!!.idBarChart.data = barData
-
-        // on below line we are setting colors for our bar chart text
-        barDataSet.valueTextColor = Color.BLACK
-
-        // on below line we are setting color for our bar data set
-        barDataSet.setColor(resources.getColor(R.color.colorPrimary))
-
-        // on below line we are setting text size
-        barDataSet.valueTextSize = 16f
-
-        // on below line we are enabling description as false
-        binding!!.idBarChart.description.isEnabled = false
-    }
-    private fun getBarChartData() {
-        barEntriesList = ArrayList()
-
-        // on below line we are adding data
-        // to our bar entries list
-        barEntriesList.add(BarEntry(1f, 1f))
-        barEntriesList.add(BarEntry(2f, 2f))
-        barEntriesList.add(BarEntry(3f, 3f))
-        barEntriesList.add(BarEntry(4f, 4f))
-        barEntriesList.add(BarEntry(5f, 5f))
 
     }
+
+
     fun setUpToolbar(
         binding: ToolbarBinding,
         title: String?,
@@ -94,5 +81,83 @@ class ChartsActivity : AppCompatActivity() {
         binding.tvTitle.setTextColor(ContextCompat.getColor(this, arrowTitleColor))
         binding.toolbar.setBackgroundResource(background)
         binding.llBack.setOnClickListener { v -> finish() }
+
+    }
+
+    private fun getData() {
+
+        val myMostViewedPostsQuery: Query
+        myMostViewedPostsQuery = dRef!!.child(Tags.TABLE_REPORTS)
+
+
+
+        newlowreportList!!.clear()
+        newmediumreportList!!.clear()
+        newhighreportList!!.clear()
+        finishlowreportList!!.clear()
+        finishmediumreportList!!.clear()
+        finishthighreportList!!.clear()
+        myMostViewedPostsQuery.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                newlowreportList!!.clear()
+                newmediumreportList!!.clear()
+                newhighreportList!!.clear()
+                finishlowreportList!!.clear()
+                finishmediumreportList!!.clear()
+                finishthighreportList!!.clear()
+                for (postSnapshot in dataSnapshot.children) {
+                    // TODO: handle the post
+                    Log.e(ContentValues.TAG, postSnapshot.value.toString())
+                    val userModel = postSnapshot.getValue<ReportModel>()
+                    if (userModel!!.periority.equals("low")) {
+                        if (userModel.status.equals("new")) {
+                            newlowreportList!!.add(userModel)
+                        } else {
+                            finishlowreportList!!.add(userModel)
+
+                        }
+                    }
+                    else if (userModel.periority.equals("medium")) {
+                        if (userModel.status.equals("new")) {
+                            newmediumreportList!!.add(userModel)
+                        } else {
+                            finishmediumreportList!!.add(userModel)
+
+                        }
+                    }
+                    else {
+                        if (userModel.status.equals("new")) {
+                            newhighreportList!!.add(userModel)
+                        } else {
+                            finishthighreportList!!.add(userModel)
+
+                        }
+                    }
+
+
+
+
+
+
+                }
+                var size=newlowreportList!!.size+newmediumreportList!!.size+newhighreportList!!.size+finishlowreportList!!.size+finishmediumreportList!!.size+finishthighreportList!!.size
+                pieData!!.add(SliceValue(newlowreportList!!.size.toFloat()/size, Color.RED).setLabel("new Low"))
+                pieData!!.add(SliceValue(newmediumreportList!!.size.toFloat()/size, Color.BLUE).setLabel(" new medium"))
+                pieData!!.add(SliceValue(newhighreportList!!.size.toFloat()/size, Color.GREEN).setLabel("new High"))
+                pieData!!.add(SliceValue(finishlowreportList!!.size.toFloat()/size, Color.CYAN).setLabel("Finished Low"))
+                pieData!!.add(SliceValue(finishmediumreportList!!.size.toFloat()/size, Color.BLACK).setLabel("Finished medium"))
+                pieData!!.add(SliceValue(finishthighreportList!!.size.toFloat()/size, Color.MAGENTA).setLabel("Finished High"))
+                val pieChartData = PieChartData(pieData)
+                pieChartData.setHasLabels(true);
+
+                binding!!.chart.pieChartData = pieChartData
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Getting Post failed, log a message
+                Log.w(ContentValues.TAG, "loadPost:onCancelled", databaseError.toException())
+                // ...
+            }
+        })
     }
 }

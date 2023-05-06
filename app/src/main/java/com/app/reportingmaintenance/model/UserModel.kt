@@ -14,32 +14,59 @@ data class UserModel(
     var phone: String? = "",
     var user_type: String? = "",
     var disid: String? = "",
-){
+) {
 
     @Exclude
     fun toMap(): Map<String, Any?> {
-        if( studentNumber!!.isNotEmpty()){
+        if (studentNumber!!.isNotEmpty()) {
+            if (password!!.isNotEmpty()) {
+                return mapOf(
+                    "id" to id,
+                    "email" to email,
+                    "password" to password,
+                    "studentNumber" to studentNumber,
+                    "name" to name,
+                    "phone" to phone,
+                    "user_type" to user_type,
+                )
+            } else {
+                return mapOf(
+                    "id" to id,
+                    "email" to email,
+                    "studentNumber" to studentNumber,
+                    "name" to name,
+                    "phone" to phone,
+                    "user_type" to user_type,
+                )
+            }
+        } else {
+            if(password!!.isNotEmpty()){
+            return mapOf(
 
-        return  mapOf(
-            "id" to id,
-            "email" to email,
-            "password" to password,
-            "studentNumber" to studentNumber,
-            "name" to name,
-            "phone" to phone,
-            "user_type" to user_type,
-        )}
-        else{
-        return mapOf(
-            "id" to id,
-            "email" to email,
-            "password" to password,
+                "id" to id,
+                "email" to email,
+                "password" to password,
 
-            "name" to name,
+                "name" to name,
 
-            "user_type" to user_type,
+                "user_type" to user_type,
 
-            "disid" to disid
-        )
-    }}
+                "disid" to disid
+            )}
+            else{
+                return mapOf(
+
+                    "id" to id,
+                    "email" to email,
+
+
+                    "name" to name,
+
+                    "user_type" to user_type,
+
+                    "disid" to disid
+                )
+            }
+        }
+    }
 }

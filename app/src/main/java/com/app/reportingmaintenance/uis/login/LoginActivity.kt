@@ -74,6 +74,8 @@ class LoginActivity : AppCompatActivity() {
                             Log.e("rrr", snapshot.value.toString());
                             for (postSnapshot in snapshot.children) {
                             val userModel = postSnapshot.getValue<UserModel>()
+
+                               Log.e(";;llll", userModel!!.toMap().toString())
                             if (userModel!!.email == loginmodel.email && userModel.password == loginmodel.password) {
                                 if(userModel.user_type=="admin"){
                                     preferences!!.create_update_userData(baseContext,userModel)
@@ -81,11 +83,14 @@ class LoginActivity : AppCompatActivity() {
                                     val intent = Intent(baseContext, HomeActivity::class.java)
                                     startActivity(intent)
                                     finish()
-                                }else {
+                                }
+                                else {
+                                   // Log.e("llll", userModel!!.toMap().toString())
                                     auth!!.signInWithEmailAndPassword(
                                         loginmodel.email,
                                         loginmodel.password
-                                    ).addOnCompleteListener {
+                                    )
+                                        .addOnCompleteListener {
                                         if (it.isSuccessful) {
                                         if (auth!!.currentUser!!.isEmailVerified) {
 
@@ -96,6 +101,11 @@ class LoginActivity : AppCompatActivity() {
                                             finish()
                                         }
                                         else {
+                                            preferences!!.create_update_userData(baseContext,userModel)
+
+                                            val intent = Intent(baseContext, HomeActivity::class.java)
+                                            startActivity(intent)
+                                            finish()
                                             Toast.makeText(
                                                 baseContext,
                                                 "please verfaiy your email",
@@ -104,7 +114,9 @@ class LoginActivity : AppCompatActivity() {
 
                                         }
                                         }
-                                    }
+                                    }.addOnFailureListener( {
+                                            Log.e("llll",it.toString())
+                                        })
                                 }
 
                             }
