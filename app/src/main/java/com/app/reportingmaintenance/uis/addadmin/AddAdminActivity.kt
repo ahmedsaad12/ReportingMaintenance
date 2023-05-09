@@ -1,4 +1,4 @@
-package com.app.reportingmaintenance.uis.addtechnician
+package com.app.reportingmaintenance.uis.addadmin
 
 import android.app.ProgressDialog
 import android.content.ContentValues
@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import com.app.reportingmaintenance.R
+import com.app.reportingmaintenance.databinding.ActivityAddAdminBinding
 import com.app.reportingmaintenance.databinding.ActivityAddtechnicianBinding
 import com.app.reportingmaintenance.databinding.ToolbarBinding
 import com.app.reportingmaintenance.model.*
@@ -26,23 +27,21 @@ import com.google.firebase.database.ktx.getValue
 import java.util.*
 
 
-class AddTechnicianActivity : AppCompatActivity() {
+class AddAdminActivity : AppCompatActivity() {
     private lateinit var dialog: ProgressDialog
-    private var binding: ActivityAddtechnicianBinding? = null
-private var addDataModel: AddTechnicianModel = AddTechnicianModel();
+    private var binding: ActivityAddAdminBinding? = null
+private var addDataModel: AddAdminModel = AddAdminModel();
     private var dRef: DatabaseReference? = null
-  var disAdapter :ArrayAdapter<String>?=null
     private var preferences: Preferences? = null
     private var auth: FirebaseAuth? = null
 
-    private var disList:MutableList<String>?= null
-    private var disListid:MutableList<String>?= null
+
     private var isadd:Boolean=true
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 // Remember that you should never show the action bar if the
 // status bar is hidden, so hide that too if necessary.
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_addtechnician)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_add_admin)
         intitView()
 
     }
@@ -52,7 +51,7 @@ private var addDataModel: AddTechnicianModel = AddTechnicianModel();
 
         setUpToolbar(
             binding!!.toolbar,
-            "add Technicians",
+            "add Admin",
             R.color.white,
             R.color.black
         )
@@ -61,24 +60,11 @@ private var addDataModel: AddTechnicianModel = AddTechnicianModel();
         }
         preferences = Preferences.newInstance()
 
-        disList = mutableListOf()
-        disListid = mutableListOf()
-     disAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, disList!!)
-        binding!!.spType.adapter=disAdapter
+
         dRef = FirebaseDatabase.getInstance().getReference(Tags.DATABASE_NAME)
         addDataModel.context=this
         binding!!.model=addDataModel
-        binding!!.spType.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(adapterView: AdapterView<*>?, view: View, i: Int, l: Long) {
 
-                    addDataModel.disid= disListid!![i];
-
-                binding!!.model=addDataModel
-            }
-
-            override fun onNothingSelected(adapterView: AdapterView<*>?) {}
-        }
-        getData()
         binding!!.btnLogin.setOnClickListener(View.OnClickListener {
             // Log.e("rrr", loginmodel.email.replaceAfter("@", "").replace("@", ""));
              dialog = Common.createProgressDialog(
@@ -140,23 +126,21 @@ if(snapshot.value!=null){
     private fun setuser() {
         var id=random()
 
-        val post = UserModel(id ,"",addDataModel.email, addDataModel.name,"","tech",addDataModel.disid)
+        val post = UserModel(id ,"",addDataModel.email,  "","","admin","")
        // addDataModel.email=""
         val postValues = post.toMap()
         dRef!!.child(Tags.TABLE_USERS)
             .child(id)
             .setValue(postValues).addOnSuccessListener {
                 dialog.dismiss()
-                Log.e("ldldldl",addDataModel.password)
-//                preferences!!.create_update_userData(this,post)
-//
-//                val intent = Intent(this, HomeActivity::class.java)
-//                startActivity(intent)
+                Toast.makeText(this, "success", Toast.LENGTH_LONG).show()
+             //   Log.e("ldldldl",addDataModel.password)
+
                 auth!!.createUserWithEmailAndPassword(addDataModel.email, addDataModel.password).addOnCompleteListener {
 
                     auth!!.currentUser!!.sendEmailVerification().addOnCompleteListener {
                         if(it.isSuccessful){
-                           // Toast.makeText(this, "check your email", Toast.LENGTH_LONG).show()
+                            Toast.makeText(this, "check your email", Toast.LENGTH_LONG).show()
                             finish()
 //                            if(preferences!!.getSession(this)!=Tags.session_login){
 //                    preferences!!.create_update_userData(this,post)
@@ -170,42 +154,39 @@ if(snapshot.value!=null){
 //
 //                }
 
-                   // finish()
+
                 }
+
+//                preferences!!.create_update_userData(this,post)
+//
+//                val intent = Intent(this, HomeActivity::class.java)
+//                startActivity(intent)
+//                auth!!.createUserWithEmailAndPassword(addDataModel.email, addDataModel.password).addOnCompleteListener {
+//
+//                    auth!!.currentUser!!.sendEmailVerification().addOnCompleteListener {
+//                        if(it.isSuccessful){
+//                           // Toast.makeText(this, "check your email", Toast.LENGTH_LONG).show()
+//                            finish()
+////                            if(preferences!!.getSession(this)!=Tags.session_login){
+////                    preferences!!.create_update_userData(this,post)
+//////
+////                    val intent = Intent(this, HomeActivity::class.java)
+////                    startActivity(intent)
+////                        }
+//                        }
+//                    }
+//
+////
+////                }
+//
+//                   // finish()
+//                }
 
 
             }.addOnFailureListener {
                 Toast.makeText(this, "invaild user", Toast.LENGTH_LONG).show()
 
             }
-    }
-    private fun getData() {
-        val myMostViewedPostsQuery = dRef!!.child(Tags.TABLE_DisruptionTypes)
-disList!!.clear()
-        myMostViewedPostsQuery.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                disList!!.clear()
-
-                for (postSnapshot in dataSnapshot.children) {
-                    // TODO: handle the post
-                    Log.e(ContentValues.TAG, postSnapshot.value.toString())
-                    val dataModel = postSnapshot.getValue<DataModel>()
-
-                    disList!!.add(dataModel!!.name!!);
-                    disListid!!.add(dataModel.id!!);
-
-                }
-                disAdapter!!.notifyDataSetChanged()
-
-
-            }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-                // Getting Post failed, log a message
-                Log.w(ContentValues.TAG, "loadPost:onCancelled", databaseError.toException())
-                // ...
-            }
-        })
     }
     fun setUpToolbar(
         binding: ToolbarBinding,

@@ -111,7 +111,7 @@ class SignupActivity : AppCompatActivity() {
     private fun setuser() {
         var id=random()
 
-        val post = UserModel(id,loginmodel.studentNumber, loginmodel.email, loginmodel.password, loginmodel.name,loginmodel.phone,"user")
+        val post = UserModel(id,loginmodel.studentNumber, loginmodel.email,  loginmodel.name,loginmodel.phone,"user")
         val postValues = post.toMap()
         dRef!!.child(Tags.TABLE_USERS)
             .child(id)

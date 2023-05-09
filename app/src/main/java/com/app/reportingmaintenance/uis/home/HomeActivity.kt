@@ -12,6 +12,7 @@ import com.app.reportingmaintenance.R
 import com.app.reportingmaintenance.databinding.ActivityHomeBinding
 import com.app.reportingmaintenance.databinding.ToolbarBinding
 import com.app.reportingmaintenance.preferences.Preferences
+import com.app.reportingmaintenance.uis.addadmin.AddAdminActivity
 import com.app.reportingmaintenance.uis.charts.ChartsActivity
 import com.app.reportingmaintenance.uis.disruption_typs.DisruptionTypesActivity
 import com.app.reportingmaintenance.uis.editstudent.EditStudentActivity
@@ -74,6 +75,7 @@ class HomeActivity : AppCompatActivity() {
         if (!preferences!!.getUserData(this).user_type.equals("admin")) {
          //  Log.e("uuu",preferences!!.getUserData(this).user_type!!)
             binding!!.cardCharts.visibility = View.GONE
+            binding!!.cardAddAdmin.visibility = View.GONE
             binding!!.cardTech.visibility = View.GONE
             binding!!.cardDis.visibility = View.GONE
             binding!!.cardFac.visibility = View.GONE
@@ -98,6 +100,10 @@ class HomeActivity : AppCompatActivity() {
         }
         binding!!.cardCharts.setOnClickListener(View.OnClickListener {
             var intent = Intent(this, ChartsActivity::class.java)
+            startActivity(intent)
+        })
+        binding!!.cardAddAdmin.setOnClickListener(View.OnClickListener {
+            var intent = Intent(this, AddAdminActivity::class.java)
             startActivity(intent)
         })
         binding!!.cardReports.setOnClickListener(View.OnClickListener {

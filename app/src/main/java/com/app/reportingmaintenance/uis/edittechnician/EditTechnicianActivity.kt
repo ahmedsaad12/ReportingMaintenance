@@ -113,7 +113,7 @@ class EditTechnicianActivity : AppCompatActivity() {
             id,
             "",
             addDataModel.email,
-            "",
+
             addDataModel.name,
             "",
             "tech",

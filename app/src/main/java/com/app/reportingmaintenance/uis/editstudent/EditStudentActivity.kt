@@ -82,11 +82,13 @@ class EditStudentActivity : AppCompatActivity() {
             userModel.id,
             loginmodel.studentNumber,
             loginmodel.email,
-            "",
+
             loginmodel.name,
             loginmodel.phone,
-            "user",
+            "user"
+            ,
             ""
+
         )
         val postValues = post.toMap()
         dRef!!.child(Tags.TABLE_USERS)

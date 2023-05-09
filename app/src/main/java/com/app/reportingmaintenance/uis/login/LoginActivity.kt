@@ -15,6 +15,7 @@ import com.app.reportingmaintenance.model.UserModel
 import com.app.reportingmaintenance.preferences.Preferences
 import com.app.reportingmaintenance.share.Common
 import com.app.reportingmaintenance.tags.Tags
+import com.app.reportingmaintenance.uis.forgotpassword.ForgotPasswordActivity
 import com.app.reportingmaintenance.uis.home.HomeActivity
 import com.app.reportingmaintenance.uis.signup.SignupActivity
 import com.google.firebase.auth.FirebaseAuth
@@ -58,6 +59,12 @@ class LoginActivity : AppCompatActivity() {
             startActivity(intent)
 
         })
+            binding!!.txtForgot.setOnClickListener(View.OnClickListener {
+
+            var intent = Intent(this, ForgotPasswordActivity::class.java)
+            startActivity(intent)
+
+        })
         binding!!.btnLogin.setOnClickListener(View.OnClickListener {
            // Log.e("rrr", loginmodel.email.replaceAfter("@", "").replace("@", ""));
             val dialog: ProgressDialog = Common.createProgressDialog(
@@ -75,16 +82,9 @@ class LoginActivity : AppCompatActivity() {
                             for (postSnapshot in snapshot.children) {
                             val userModel = postSnapshot.getValue<UserModel>()
 
-                               Log.e(";;llll", userModel!!.toMap().toString())
-                            if (userModel!!.email == loginmodel.email && userModel.password == loginmodel.password) {
-                                if(userModel.user_type=="admin"){
-                                    preferences!!.create_update_userData(baseContext,userModel)
+                            //   Log.e(";;llll", userModel!!.toMap().toString())
+                            if (userModel!!.email == loginmodel.email ) {
 
-                                    val intent = Intent(baseContext, HomeActivity::class.java)
-                                    startActivity(intent)
-                                    finish()
-                                }
-                                else {
                                    // Log.e("llll", userModel!!.toMap().toString())
                                     auth!!.signInWithEmailAndPassword(
                                         loginmodel.email,
@@ -101,11 +101,6 @@ class LoginActivity : AppCompatActivity() {
                                             finish()
                                         }
                                         else {
-                                            preferences!!.create_update_userData(baseContext,userModel)
-
-                                            val intent = Intent(baseContext, HomeActivity::class.java)
-                                            startActivity(intent)
-                                            finish()
                                             Toast.makeText(
                                                 baseContext,
                                                 "please verfaiy your email",
@@ -117,7 +112,7 @@ class LoginActivity : AppCompatActivity() {
                                     }.addOnFailureListener( {
                                             Log.e("llll",it.toString())
                                         })
-                                }
+
 
                             }
 //                            else {

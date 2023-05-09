@@ -40,6 +40,18 @@
 
         </activity>
         <activity
+            android:name=".uis.addadmin.AddAdminActivity"
+            android:configChanges="uiMode"
+            android:exported="false">
+
+        </activity>
+        <activity
+            android:name=".uis.forgotpassword.ForgotPasswordActivity"
+            android:configChanges="uiMode"
+            android:exported="false">
+
+        </activity>
+        <activity
             android:name=".uis.faculties.FacultiesActivity"
             android:configChanges="uiMode"
             android:exported="false">
