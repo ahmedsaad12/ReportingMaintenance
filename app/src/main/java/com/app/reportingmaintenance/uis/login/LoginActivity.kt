@@ -84,7 +84,11 @@ class LoginActivity : AppCompatActivity() {
 
                             //   Log.e(";;llll", userModel!!.toMap().toString())
                             if (userModel!!.email == loginmodel.email ) {
+preferences!!.create_update_userData(baseContext, userModel)
 
+                                            val intent = Intent(baseContext, HomeActivity::class.java)
+                                            startActivity(intent)
+                                            finish()
                                    // Log.e("llll", userModel!!.toMap().toString())
                                     auth!!.signInWithEmailAndPassword(
                                         loginmodel.email,
