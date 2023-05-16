@@ -12,9 +12,12 @@ import com.app.reportingmaintenance.uis.faculties.FacultiesActivity
 import com.app.reportingmaintenance.uis.reports.fragments.FragmentCurrentReport
 import com.squareup.picasso.Picasso
 
-class ReportAdapter(private val fragment: Fragment, private val ReportList: MutableList<ReportModel>) :
+class ReportAdapter(
+    private val fragment: Fragment,
+    private val ReportList: MutableList<ReportModel>
+) :
     RecyclerView.Adapter<ReportViewHolder>() {
-    private var b: Boolean=false
+    private var b: Boolean = false
     lateinit var binding: ReportRowBinding
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReportViewHolder {
@@ -26,22 +29,22 @@ class ReportAdapter(private val fragment: Fragment, private val ReportList: Muta
     override fun onBindViewHolder(holder: ReportViewHolder, position: Int) {
 
         val Report = ReportList[position]
+if(Report.image!!.isNotEmpty()){
+        Picasso.get().load(Report.image).fit().into(binding!!.image)}
+        binding.btnConfirm.setOnClickListener {
+            if (fragment is FragmentCurrentReport) {
+                val fragmentCurrentReport = fragment as FragmentCurrentReport
+                fragmentCurrentReport.changestatus(ReportList.get(holder.layoutPosition))
 
-        Picasso.get().load(Report.image).fit().into(binding!!.image)
-binding.btnConfirm.setOnClickListener {
-    if(fragment is FragmentCurrentReport){
-        val fragmentCurrentReport = fragment as FragmentCurrentReport
-        fragmentCurrentReport.changestatus(ReportList.get(holder.layoutPosition))
-
-    }
-}
+            }
+        }
         binding!!.b = b;
         holder.bind(Report)
     }
 
     override fun getItemCount(): Int = ReportList.size
     fun setshow(b: Boolean) {
-      this.b=b;
+        this.b = b;
     }
 }
 
