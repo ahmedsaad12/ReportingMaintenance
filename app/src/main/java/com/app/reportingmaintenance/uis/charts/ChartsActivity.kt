@@ -141,16 +141,16 @@ getData()
 
                 }
                 var size=newlowreportList!!.size+newmediumreportList!!.size+newhighreportList!!.size+finishlowreportList!!.size+finishmediumreportList!!.size+finishthighreportList!!.size
-                pieData!!.add(SliceValue(newlowreportList!!.size.toFloat()/size, Color.RED).setLabel("new Low"))
-                pieData!!.add(SliceValue(newmediumreportList!!.size.toFloat()/size, Color.BLUE).setLabel(" new medium"))
-                pieData!!.add(SliceValue(newhighreportList!!.size.toFloat()/size, Color.GREEN).setLabel("new High"))
-                pieData!!.add(SliceValue(finishlowreportList!!.size.toFloat()/size, Color.CYAN).setLabel("Finished Low"))
-                pieData!!.add(SliceValue(finishmediumreportList!!.size.toFloat()/size, Color.BLACK).setLabel("Finished medium"))
-                pieData!!.add(SliceValue(finishthighreportList!!.size.toFloat()/size, Color.MAGENTA).setLabel("Finished High"))
+                pieData!!.add(SliceValue(newlowreportList!!.size.toFloat()/size, Color.rgb(189,236,182)).setLabel("Job new Low("+((newlowreportList!!.size.toFloat()*100)/size)+"%)"))
+                pieData!!.add(SliceValue(newmediumreportList!!.size.toFloat()/size, Color.rgb(225,204,79)).setLabel("Job new medium("+((newmediumreportList!!.size.toFloat()*100)/size)+"%)"))
+                pieData!!.add(SliceValue(newmediumreportList!!.size.toFloat()/size, Color.rgb(130,137,143)).setLabel("Job new High("+((newhighreportList!!.size.toFloat()*100)/size)+"%)"))
+                pieData!!.add(SliceValue(finishlowreportList!!.size.toFloat()/size, Color.rgb(230,50,68)).setLabel("Job Finished Low("+((finishlowreportList!!.size.toFloat()*100)/size)+"%)"))
+                pieData!!.add(SliceValue(finishmediumreportList!!.size.toFloat()/size, Color.rgb(67,71,80)).setLabel("Job Finished medium("+((finishmediumreportList!!.size.toFloat()*100)/size)+"%)"))
+                pieData!!.add(SliceValue(finishthighreportList!!.size.toFloat()/size, Color.rgb(234,230,202)).setLabel("Job Finished High("+((finishthighreportList!!.size.toFloat()*100)/size)+"%)"))
                 val pieChartData = PieChartData(pieData)
-                pieChartData.setHasLabels(true);
-
+                pieChartData.setHasLabels(true)
                 binding!!.chart.pieChartData = pieChartData
+
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
