@@ -5,6 +5,7 @@
         <variable
             name="model"
             type="com.app.reportingmaintenance.model.AddDataModel" />
+
     </data>
     <LinearLayout
         android:layout_width="match_parent"
@@ -74,7 +75,60 @@
                             android:textSize="15sp" />
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="16dp"
+                    app:cardCornerRadius="3dp"
 
+                    >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="center_vertical"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="8dp">
+
+                        <Space
+                            android:layout_width="8dp"
+                            android:layout_height="0dp" />
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center_vertical"
+                            android:src="@android:drawable/ic_dialog_map"
+                            app:tint="@color/colorPrimary" />
+
+                        <Space
+                            android:layout_width="8dp"
+                            android:layout_height="0dp" />
+
+                        <TextView
+
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:ellipsize="end"
+                            android:hint="Address"
+                            android:lines="1"
+                            android:paddingStart="8dp"
+                            android:paddingEnd="8dp"
+                            android:text="@{model.address}"
+                            android:textColor="@color/black"
+                            android:textColorHint="@color/grey5"
+                            android:textSize="14sp" />
+
+
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
 
                 <Button
                     android:id="@+id/btnLogin"

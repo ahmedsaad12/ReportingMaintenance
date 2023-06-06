@@ -23,10 +23,31 @@ class AddDataModel : BaseObservable() {
 
         }
 
+    @get:Bindable
+    var address = ""
+        set(value) {
+            field = value
+            validate()
+
+            notifyPropertyChanged(BR.address
+            )
+
+        }
+ @get:Bindable
+    var latlng = ""
+        set(value) {
+            field = value
+            validate()
+
+            notifyPropertyChanged(BR.latlng)
+
+        }
+
 
 
     private fun validate() {
         if (name.isNotEmpty()
+
 
         ) {
 
@@ -42,6 +63,7 @@ class AddDataModel : BaseObservable() {
             else{
                 error_name.set(null)
             }
+
 
 
             notifyPropertyChanged(BR.isvaild)

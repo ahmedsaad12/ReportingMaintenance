@@ -1,22 +1,22 @@
 package com.app.reportingmaintenance.uis.addfaculty
 
 import android.app.ProgressDialog
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import com.app.reportingmaintenance.R
 import com.app.reportingmaintenance.databinding.ActivityAddfacultyBinding
-import com.app.reportingmaintenance.databinding.ActivityLoginBinding
-import com.app.reportingmaintenance.databinding.ActivitySignupBinding
 import com.app.reportingmaintenance.databinding.ToolbarBinding
-import com.app.reportingmaintenance.model.AddDataModel
-import com.app.reportingmaintenance.model.DataModel
-import com.app.reportingmaintenance.model.LoginModel
-import com.app.reportingmaintenance.model.SignupModel
+import com.app.reportingmaintenance.model.*
 import com.app.reportingmaintenance.share.Common
 import com.app.reportingmaintenance.tags.Tags
+import com.app.reportingmaintenance.uis.map.MapActivity
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import java.util.*
@@ -25,7 +25,7 @@ import java.util.*
 class AddFacultyActivity : AppCompatActivity() {
     private var binding: ActivityAddfacultyBinding? = null
     private var dRef: DatabaseReference? = null
-
+    private var launcher: ActivityResultLauncher<Intent>? = null
     private var addDataModel: AddDataModel = AddDataModel();
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +37,19 @@ class AddFacultyActivity : AppCompatActivity() {
     }
 
     private fun intitView() {
+        launcher =
+            this.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if ( result.getResultCode() === RESULT_OK && result.getData() != null) {
+                    val location =
+                        result.getData()!!.getSerializableExtra("location") as SelectedLocation
+                    addDataModel.address= location.getAddress()!!
+                    addDataModel.latlng=location.getLat() .toString()+ ","+location.getLng().toString()
+                    binding!!.setModel(addDataModel)
+                    Log.e("sda", "asda")
+                }
+
+            }
+
         setUpToolbar(
             binding!!.toolbar,
             "add Faculty",
@@ -63,6 +76,13 @@ class AddFacultyActivity : AppCompatActivity() {
                 finish()
             }
         })
+        binding!!.cardAddress.setOnClickListener { view -> navigateToMapActivity() }
+
+    }
+
+    private fun navigateToMapActivity() {
+        val intent = Intent(this, MapActivity::class.java)
+        launcher!!.launch(intent)
     }
     fun setUpToolbar(
         binding: ToolbarBinding,
