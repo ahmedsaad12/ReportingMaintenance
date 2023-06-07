@@ -64,7 +64,7 @@ class AddFacultyActivity : AppCompatActivity() {
         binding!!.model=addDataModel
         binding!!.btnLogin.setOnClickListener(View.OnClickListener {
             var id=random()
-            val post = DataModel(id,addDataModel.name)
+            val post = DataModel(id,addDataModel.name,addDataModel.address,addDataModel.latlng)
             val dialog: ProgressDialog = Common.createProgressDialog(
                 this,
                 "wait"
