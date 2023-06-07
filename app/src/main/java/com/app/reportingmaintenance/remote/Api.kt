@@ -11,9 +11,10 @@ import java.util.concurrent.TimeUnit
 
 interface Api {
 
-     var retrofit: Retrofit?
 
-    private fun getRetrofit(baseUrl: String): Retrofit? {
+
+     fun getRetrofit(baseUrl: String): Retrofit? {
+         val retrofit: Retrofit?
         val interceptor = Interceptor { chain: Interceptor.Chain ->
             val request = chain.request()
             val accept = request.newBuilder()

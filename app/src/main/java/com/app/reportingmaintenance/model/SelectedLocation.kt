@@ -2,7 +2,7 @@ package com.app.reportingmaintenance.model
 
 import java.io.Serializable
 
-class SelectedLocation(lat: Double, lng: Double, address: String): Serializable {
+class SelectedLocation(): Serializable {
     private var lat = 0.0
     private var lng = 0.0
     private var address: String? = null

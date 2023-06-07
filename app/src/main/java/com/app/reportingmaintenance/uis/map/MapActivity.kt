@@ -84,14 +84,14 @@ class MapActivity: AppCompatActivity() , OnMapReadyCallback, GoogleApiClient.Con
 
     open fun initView() {
 
-        binding!!.setLang("en")
-        binding!!.progBar.getIndeterminateDrawable().setColorFilter(
+        binding!!.lang = "en"
+        binding!!.progBar.indeterminateDrawable.setColorFilter(
             ContextCompat.getColor(this, R.color.colorPrimary),
             PorterDuff.Mode.SRC_IN
         )
         binding!!.edtSearch.setOnEditorActionListener { v, actionId, event ->
             if (actionId === EditorInfo.IME_ACTION_SEARCH) {
-                val query: String = binding!!.edtSearch.getText().toString()
+                val query: String = binding!!.edtSearch.text.toString()
                 if (!TextUtils.isEmpty(query)) {
                     Common.CloseKeyBoard(this@MapActivity, binding!!.edtSearch)
                     Search(query)
@@ -101,10 +101,12 @@ class MapActivity: AppCompatActivity() , OnMapReadyCallback, GoogleApiClient.Con
             false
         }
         binding!!.btnSelect.setOnClickListener { view ->
-            address = binding!!.edtSearch.getText().toString()
-            if (!address.isEmpty()) {
-                val selectedLocation = SelectedLocation(lat, lng, address)
-                var intent: Intent
+            address = binding!!.edtSearch.text.toString()
+            if (address.isNotEmpty()) {
+                val selectedLocation = SelectedLocation()
+                selectedLocation.SelectedLocation(lat, lng, address)
+                val intent: Intent
+                Log.e("ldldld",selectedLocation.getAddress()+" "+selectedLocation.getLat()+" "+selectedLocation.getLng())
                 intent= getIntent()
                 intent?.putExtra("location", selectedLocation)!!
                 setResult(RESULT_OK, intent)
@@ -139,7 +141,7 @@ class MapActivity: AppCompatActivity() , OnMapReadyCallback, GoogleApiClient.Con
     }
 
     open fun updateUI() {
-        val fragment = getSupportFragmentManager().findFragmentById(R.id.map) as SupportMapFragment
+        val fragment = supportFragmentManager.findFragmentById(R.id.map1) as SupportMapFragment
         fragment.getMapAsync(this)
     }
 
@@ -159,7 +161,7 @@ class MapActivity: AppCompatActivity() , OnMapReadyCallback, GoogleApiClient.Con
     }
 
     open fun Search(query: String) {
-        binding!!.progBar.setVisibility(View.VISIBLE)
+        binding!!.progBar.visibility = View.VISIBLE
         val fields = "id,place_id,name,geometry,formatted_address"
         getService("https://maps.googleapis.com/maps/api/")
             ?.searchOnMap("textquery", query, fields, lang, "AIzaSyBGJZRVH7V8iTcIrjCjJaXwpNWbeIKDiRk")
@@ -168,20 +170,20 @@ class MapActivity: AppCompatActivity() , OnMapReadyCallback, GoogleApiClient.Con
                     call: Call<PlaceMapDetailsData?>,
                     response: Response<PlaceMapDetailsData?>
                 ) {
-                    binding!!.progBar.setVisibility(View.GONE)
-                    if (response.isSuccessful() && response.body() != null) {
+                    binding!!.progBar.visibility = View.GONE
+                    if (response.isSuccessful && response.body() != null) {
                         if (response.body()!!.getCandidates()!!.size > 0) {
                             address = (response.body()!!.getCandidates()!!.get(0)!!.formatted_address
                                 ?.replace("Unnamed Road,", "") ?: binding!!.edtSearch.setText(address + "" )).toString()
                             AddMarker(
-                                response!!.body()!!.getCandidates()!!.get(0)!!.geometry!!.location!!
+                                response.body()!!.getCandidates()!!.get(0)!!.geometry!!.location!!
                                     .lat,
-                                response!!.body()!!.getCandidates()!!.get(0)!!.geometry!!.location!!
+                                response.body()!!.getCandidates()!!.get(0)!!.geometry!!.location!!
                                     .lng
                             )
                         }
                     } else {
-                        binding!!.progBar.setVisibility(View.GONE)
+                        binding!!.progBar.visibility = View.GONE
                         try {
                             Log.e("error_code", response.errorBody()!!.string())
                         } catch (e: IOException) {
@@ -192,7 +194,7 @@ class MapActivity: AppCompatActivity() , OnMapReadyCallback, GoogleApiClient.Con
 
                 override fun onFailure(call: Call<PlaceMapDetailsData?>, t: Throwable) {
                     try {
-                        binding!!.progBar.setVisibility(View.GONE)
+                        binding!!.progBar.visibility = View.GONE
 
                         //  Toast.makeText(MapActivity.this, getString(R.string.something), Toast.LENGTH_LONG).show();
                     } catch (e: Exception) {
@@ -202,7 +204,7 @@ class MapActivity: AppCompatActivity() , OnMapReadyCallback, GoogleApiClient.Con
     }
 
     open fun getGeoData(lat: Double, lng: Double) {
-        binding!!.progBar.setVisibility(View.VISIBLE)
+        binding!!.progBar.visibility = View.VISIBLE
         val location = "$lat,$lng"
         getService("https://maps.googleapis.com/maps/api/")
             ?.getGeoData(location, lang, "AIzaSyBGJZRVH7V8iTcIrjCjJaXwpNWbeIKDiRk")
@@ -211,12 +213,14 @@ class MapActivity: AppCompatActivity() , OnMapReadyCallback, GoogleApiClient.Con
                     call: Call<PlaceGeocodeData?>,
                     response: Response<PlaceGeocodeData?>
                 ) {
-                    binding!!.progBar.setVisibility(View.GONE)
-                    if (response.isSuccessful() && response.body() != null) {
+                    binding!!.progBar.visibility = View.GONE
+                    if (response.isSuccessful && response.body() != null) {
+                     //   Log.e("response", (response.body()!!.getResults()!!.get(0)!!.formatted_address!!))
                         if (response.body()!!.getResults()!!.size > 0) {
-                            binding!!.btnSelect.setVisibility(View.VISIBLE)
+                            binding!!.btnSelect.visibility = View.VISIBLE
                             address = (response.body()!!.getResults()!!.get(0)!!.formatted_address
                                 ?.replace("Unnamed Road,", "") ?: binding!!.edtSearch.setText(address + "" )).toString()
+                            binding!!.edtSearch.setText(address + "" )
                         }
                     } else {
                         try {
@@ -229,7 +233,7 @@ class MapActivity: AppCompatActivity() , OnMapReadyCallback, GoogleApiClient.Con
 
                 override fun onFailure(call: Call<PlaceGeocodeData?>, t: Throwable) {
                     try {
-                        binding!!.progBar.setVisibility(View.GONE)
+                        binding!!.progBar.visibility = View.GONE
 
                         //   Toast.makeText(MapActivity.this, getString(R.string.something), Toast.LENGTH_LONG).show();
                     } catch (e: Exception) {
@@ -248,7 +252,7 @@ class MapActivity: AppCompatActivity() , OnMapReadyCallback, GoogleApiClient.Con
             )
             mMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(lat, lng), zoom))
         } else {
-            marker!!.setPosition(LatLng(lat, lng))
+            marker!!.position = LatLng(lat, lng)
             mMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(lat, lng), zoom))
         }
     }
@@ -356,11 +360,6 @@ class MapActivity: AppCompatActivity() , OnMapReadyCallback, GoogleApiClient.Con
         }
     }
 
-    override var retrofit: Retrofit?
-        get() = TODO("Not yet implemented")
-        set(value) {
 
-           // return value
-        }
 
 }
