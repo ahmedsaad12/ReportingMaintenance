@@ -136,7 +136,7 @@ facultyList!!.clear()
             }
 
         })
-        dRef!!.child(Tags.TABLE_Faculties).child(data.name!!).removeValue().addOnSuccessListener {
+        dRef!!.child(Tags.TABLE_Faculties).child(data.id!!).removeValue().addOnSuccessListener {
             facultyList!!.remove(data)
             facultyAdapter!!.notifyDataSetChanged()
         }

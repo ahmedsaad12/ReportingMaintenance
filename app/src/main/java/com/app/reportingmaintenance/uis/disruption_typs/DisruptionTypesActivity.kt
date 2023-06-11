@@ -130,7 +130,7 @@ disList!!.clear()
             }
 
         })
-        dRef!!.child(Tags.TABLE_DisruptionTypes).child(data.name!!).removeValue().addOnSuccessListener {
+        dRef!!.child(Tags.TABLE_DisruptionTypes).child(data.id!!).removeValue().addOnSuccessListener {
             disList!!.remove(data)
             disAdapter!!.notifyDataSetChanged()
         }
