@@ -110,7 +110,7 @@ class AddReportsActivity : AppCompatActivity() {
         placeListid = mutableListOf()
         placeAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, placeList!!)
         peroirityList = mutableListOf()
-        peroirityList!!.add("hehi")
+        peroirityList!!.add("high")
         peroirityList!!.add("medium")
         peroirityList!!.add("low")
         peroirityAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, peroirityList!!)
